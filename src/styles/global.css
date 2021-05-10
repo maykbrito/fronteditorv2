@@ -1,0 +1,88 @@
+html, body, * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #1e1e1e;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+ul {
+  margin: 0px;
+  padding: 0px;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+nav {
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
+}
+
+nav img {
+  padding: 0px 10px;
+}
+
+nav button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 10px;
+  line-height: 35px;
+  margin-right: 6px;
+  outline: none;
+  padding: 0px 6px;
+  position: relative;
+  cursor: pointer;
+}
+
+nav button.active {
+  font-weight: bold;
+}
+
+nav button.active::after,
+nav button:hover::after {
+  width: 100%;
+}
+
+nav button::after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  content: "";
+  height: 2px;
+  width: 0%;
+  background-color: orange;
+  transition: 0.4s;
+}
+
+.app > main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.editor {
+  visibility: hidden;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+}
+
+.editor.active {
+  visibility: visible;
+}
