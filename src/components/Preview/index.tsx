@@ -10,6 +10,8 @@ let pos2 = 0;
 let pos3 = 0;
 let pos4 = 0;
 
+let timer: NodeJS.Timer;
+
 function b64EncodeUnicode(str: string): string {
   // https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
   // first we use encodeURIComponent to get percent-encoded UTF-8,
@@ -61,7 +63,10 @@ export default function Preview(): JSX.Element {
     codeToIframe = b64EncodeUnicode(codeToIframe);
     codeToIframe = `data:text/html;charset=utf-8;base64,${codeToIframe}`;
 
-    setSrc(codeToIframe);
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      setSrc(codeToIframe);
+    }, 1500);
   }, [app]);
 
   function updatePreviewPosition(state: PreviewStateProps): void {
