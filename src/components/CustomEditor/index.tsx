@@ -14,7 +14,7 @@ const CustomEditor = ({
   className,
   language,
 }: CustomEditorProps): JSX.Element => {
-  const { handleEditorDidMount, handleValueChange } =
+  const { handleEditorDidMount, handleValueChange, handleEditorWillMount } =
     useContext(EditorContentContext);
 
   return (
@@ -22,9 +22,10 @@ const CustomEditor = ({
       <Editor
         height="100vh"
         width="100vw"
-        theme="vs-dark"
+        theme="Omni"
         language={language}
         value={Storage.getItem(language) || ''}
+        beforeMount={handleEditorWillMount}
         onMount={handleEditorDidMount}
         onChange={value => {
           handleValueChange(language, value || '');

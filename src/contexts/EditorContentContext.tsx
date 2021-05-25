@@ -1,6 +1,8 @@
-import { createContext, ReactNode, useCallback, useState } from 'react';
+import { createContext, ReactNode, useCallback, useState, useRef } from 'react';
 
+import { Monaco } from '@monaco-editor/react';
 import { emmetHTML } from 'emmet-monaco-es';
+import { omniTheme } from '../utils/EditorCustomTheme';
 
 import Storage, { StorageKeys, StorageState } from '../utils/Storage';
 
@@ -10,8 +12,9 @@ interface EditorContextProviderProps {
 
 interface EditorContentContextData {
   app: StorageState;
-  handleEditorDidMount: () => void;
+  handleEditorDidMount: (editor: any) => void;
   handleValueChange: (language: string, value: string) => void;
+  handleEditorWillMount: (monaco: Monaco) => void;
 }
 
 export const EditorContentContext = createContext(
@@ -22,6 +25,26 @@ export function EditorContentContextProvider({
   children,
 }: EditorContextProviderProps) {
   const [app, setApp] = useState(Storage.get());
+  const editorRef = useRef(null);
+
+  async function handleEditorWillMount(monaco: Monaco) {
+    // here is the monaco instance
+    // do something before editor is mounted
+
+    // to extend JS color and tokens
+    // https://github.com/microsoft/monaco-editor/issues/1927
+    // https://monaco-editor-extend-lang-conf.vercel.app/readme.html
+
+    // monaco.languages.setMonarchTokensProvider('javascript', {
+    //   keywords: ['exports'],
+    //   tokenizer: {
+    //     root: [{ include: 'custom' }],
+    //     custom: [['Array', 'greenClass']],
+    //   },
+    // });
+
+    monaco.editor.defineTheme('Omni', omniTheme);
+  }
 
   const handleValueChange = useCallback(
     async (language: string, value: string) => {
@@ -44,7 +67,11 @@ export function EditorContentContextProvider({
     []
   );
 
-  const handleEditorDidMount = useCallback(() => {
+  const handleEditorDidMount = useCallback(editor => {
+    editorRef.current = editor;
+    editor.onDidChangeModelLanguage((e: any) => {
+      // e.oldLanguage === 'css' ? :
+    });
     emmetHTML();
   }, []);
 
@@ -54,6 +81,7 @@ export function EditorContentContextProvider({
         app,
         handleEditorDidMount,
         handleValueChange,
+        handleEditorWillMount,
       }}
     >
       {children}
