@@ -66,7 +66,7 @@ export default function Preview(): JSX.Element {
     clearTimeout(timer);
     timer = setTimeout(() => {
       setSrc(codeToIframe);
-    }, 1500);
+    }, 1000);
   }, [app]);
 
   function updatePreviewPosition(state: PreviewStateProps): void {
