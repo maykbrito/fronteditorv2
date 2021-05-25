@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, memo } from 'react';
+
 import CustomEditor from '../CustomEditor';
 
 import logoSvg from '../../assets/logo.svg';
@@ -20,14 +21,16 @@ export function MEditor(): JSX.Element {
     [tab]
   );
 
-  const TabButton = ({ tabName, displayName }: TabButtonProps): JSX.Element => (
-    <button
-      type="button"
-      onClick={() => setTab(tabName)}
-      className={tab === tabName ? 'active' : undefined}
-    >
-      {displayName}
-    </button>
+  const TabButton = memo(
+    ({ tabName, displayName }: TabButtonProps): JSX.Element => (
+      <button
+        type="button"
+        onClick={() => setTab(tabName)}
+        className={tab === tabName ? 'active' : undefined}
+      >
+        {displayName}
+      </button>
+    )
   );
 
   return (
