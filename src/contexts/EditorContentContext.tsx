@@ -69,9 +69,9 @@ export function EditorContentContextProvider({
 
   const handleEditorDidMount = useCallback(editor => {
     editorRef.current = editor;
-    editor.onDidChangeModelLanguage((e: any) => {
-      // e.oldLanguage === 'css' ? :
-    });
+    // editor.onDidChangeModelLanguage((e: any) => {
+    //   // e.oldLanguage === 'css' ? :
+    // });
     emmetHTML();
   }, []);
 
