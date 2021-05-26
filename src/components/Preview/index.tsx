@@ -143,7 +143,13 @@ export default function Preview(): JSX.Element {
           +
         </button>
       </Header>
-      <Iframe src={src} style={{ zIndex }} id="result" frameBorder="0" />
+      <Iframe
+        src={src}
+        style={{ zIndex }}
+        id="result"
+        frameBorder="0"
+        allow="*"
+      />
     </Container>
   );
 }
