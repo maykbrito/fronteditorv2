@@ -148,7 +148,7 @@ export default function Preview(): JSX.Element {
         style={{ zIndex }}
         id="result"
         frameBorder="0"
-        allow="*"
+        allow="camera; microphone; fullscreen; accelerometer; autoplay; geolocation; payment; midi; magnetometer; gyroscope; document-domain; encrypted-media; picture-in-picture; screen-wake-lock"
       />
     </Container>
   );
