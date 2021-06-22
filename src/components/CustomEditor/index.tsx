@@ -30,6 +30,11 @@ const CustomEditor = ({
         onChange={value => {
           handleValueChange(language, value || '');
         }}
+        options={{
+          minimap: {
+            enabled: false,
+          },
+        }}
       />
     </div>
   );
