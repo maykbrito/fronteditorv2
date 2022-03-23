@@ -40,7 +40,7 @@ export function MEditor(): JSX.Element {
         <TabButton displayName="HTML" tabName="html" />
         <TabButton displayName="CSS" tabName="css" />
         <TabButton displayName="JS" tabName="javascript" />
-        <TabButton displayName="MARKDOWN" tabName="markdown" />
+        <TabButton displayName="MD" tabName="markdown" />
       </nav>
       <main>
         <CustomEditor language="html" className={getClasses('html')} />
