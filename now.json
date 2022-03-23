@@ -1,3 +1,3 @@
 {
-  "redirects": [{ "source": "/.*", "destination": "/" }]
+  "redirects": [{ "source": "/(.*)", "destination": "/" }]
 }
