@@ -20,8 +20,8 @@ const CustomEditor = ({
   return (
     <div className={className}>
       <Editor
-        height="100vh"
-        width="100vw"
+        height="100%"
+        width="100%"
         theme="Omni"
         language={language}
         value={Storage.getItem(language) || ''}
@@ -34,6 +34,13 @@ const CustomEditor = ({
           minimap: {
             enabled: false,
           },
+          fontSize: 16,
+          'semanticHighlighting.enabled': true,
+          bracketPairColorization: {
+            enabled: true,
+          },
+          wordWrap: 'on',
+          tabSize: 2,
         }}
       />
     </div>

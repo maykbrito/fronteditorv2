@@ -88,3 +88,56 @@ nav button::after {
 .editor.active {
   visibility: visible;
 }
+
+.app.fixed-right {
+  display: grid;
+  grid-template-rows: 2rem 1fr;
+  grid-template-columns: 1fr 50vw;
+  grid-template-areas:
+    'A B'
+    'C B';
+}
+
+.app.fixed-right nav {
+  grid-area: A;
+}
+
+.app.fixed-right main {
+  grid-area: C;
+}
+
+.app.fixed-right #preview {
+  grid-area: B;
+  position: initial;
+  height: 100%;
+  width: 100%;
+
+  border-radius: 0;
+
+  display: grid;
+  grid-template-columns: 2px 1fr; /* .dragger width */
+}
+
+.app.fixed-right #preview .dragger {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  background-color: #ccc;
+  cursor: col-resize;
+
+  position: relative;
+  z-index: 1;
+}
+
+.app.fixed-right #preview header {
+  display: none;
+}
+
+.app.fixed-right #preview iframe {
+  height: 100%;
+}
+
+.app.fixed-right.is-dragging #preview .dragger {
+  width: 100vw;
+  opacity: 0.6;
+}

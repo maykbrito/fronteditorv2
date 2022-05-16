@@ -4,6 +4,7 @@ import { formatCodeToIframe } from '../../utils/FormatCodeToIframe';
 import { StorageKeys } from '../../utils/Storage';
 
 import { Container, Header, Iframe } from './styles';
+import { Dragger } from './dragger';
 
 let pos1 = 0;
 let pos2 = 0;
@@ -126,6 +127,7 @@ export default function Preview(): JSX.Element {
       top={top}
       left={left}
     >
+      <Dragger />
       <Header onMouseDown={e => dragMouseDown(e)}>
         <button type="button" onClick={() => updatePreviewPosition('closed')}>
           x

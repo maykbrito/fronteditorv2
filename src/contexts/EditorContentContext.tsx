@@ -1,4 +1,11 @@
-import { createContext, ReactNode, useCallback, useState, useRef } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useState,
+  useRef,
+  RefObject,
+} from 'react';
 
 import { Monaco } from '@monaco-editor/react';
 import { emmetHTML } from 'emmet-monaco-es';
@@ -15,6 +22,8 @@ interface EditorContentContextData {
   handleEditorDidMount: (editor: any) => void;
   handleValueChange: (language: string, value: string) => void;
   handleEditorWillMount: (monaco: Monaco) => void;
+  editorRef: RefObject<HTMLElement>;
+  appRef: RefObject<HTMLDivElement>;
 }
 
 export const EditorContentContext = createContext(
@@ -26,6 +35,7 @@ export function EditorContentContextProvider({
 }: EditorContextProviderProps) {
   const [app, setApp] = useState(Storage.get());
   const editorRef = useRef(null);
+  const appRef = useRef<HTMLDivElement>(null);
 
   async function handleEditorWillMount(monaco: Monaco) {
     // here is the monaco instance
@@ -69,7 +79,6 @@ export function EditorContentContextProvider({
 
   const handleEditorDidMount = useCallback(editor => {
     editorRef.current = editor;
-    console.log('editor', editor);
     emmetHTML();
   }, []);
 
@@ -80,6 +89,8 @@ export function EditorContentContextProvider({
         handleEditorDidMount,
         handleValueChange,
         handleEditorWillMount,
+        editorRef,
+        appRef,
       }}
     >
       {children}
