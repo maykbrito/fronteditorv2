@@ -1,9 +1,10 @@
+import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 
 interface PreviewProps {
   state: 'minimized' | 'maximized' | 'closed';
-  top: string;
-  left: string;
+  // top: string;
+  // left: string;
 }
 
 const previewState = {
@@ -36,7 +37,7 @@ const previewState = {
   `,
 };
 
-export const Container = styled.div<PreviewProps>`
+export const Container = styled(motion.div)<PreviewProps>`
   --orange: #ffb82a;
   --green: #25c73a;
   --red: #ff4b46;
@@ -57,9 +58,6 @@ export const Container = styled.div<PreviewProps>`
   transition-duration: 0.2s;
 
   ${props => previewState[props.state]}
-
-  top: ${props => props.top};
-  left: ${props => props.left};
 `;
 
 export const Header = styled.header`

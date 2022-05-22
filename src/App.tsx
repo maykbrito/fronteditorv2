@@ -1,21 +1,16 @@
-import { useContext } from 'react';
-import {
-  EditorContentContext,
-  EditorContentContextProvider,
-} from './contexts/EditorContentContext';
+import { EditorContentContextProvider } from './contexts/EditorContentContext';
 
 import { MEditor } from './components/MEditor';
-import Preview from './components/Preview';
 
 import './styles/global.css';
 
 function AppWrapper() {
-  const { appRef } = useContext(EditorContentContext);
+  const params = new URLSearchParams(window.location.search);
+  const float = Boolean(params.get('float'));
 
   return (
-    <div ref={appRef} className="app fixed-right">
-      <MEditor />
-      <Preview />
+    <div className="app">
+      <MEditor float={float} />
     </div>
   );
 }

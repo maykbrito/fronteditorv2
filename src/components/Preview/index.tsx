@@ -1,4 +1,9 @@
 import { useState, useEffect, useRef, useContext } from 'react';
+import {
+  useDragControls,
+  useMotionTemplate,
+  useMotionValue,
+} from 'framer-motion';
 import { EditorContentContext } from '../../contexts/EditorContentContext';
 import { formatCodeToIframe } from '../../utils/FormatCodeToIframe';
 import { StorageKeys } from '../../utils/Storage';
@@ -33,6 +38,10 @@ export default function Preview(): JSX.Element {
 
   const previewRef = useRef<HTMLDivElement>(null);
   const [src, setSrc] = useState('');
+
+  // const [previewWidth, setPreviewWidth] = useState(0);
+  const previewWidth = useMotionValue(0);
+  const [isResizing, setIsResizing] = useState(false);
 
   const [isDragging, setIsDragging] = useState(false);
   const [previewState, setPreviewState] =
@@ -119,16 +128,32 @@ export default function Preview(): JSX.Element {
     };
   }, [isDragging]);
 
+  const containerStyle = useMotionTemplate`calc(50vw + ${previewWidth}px)`;
+
+  const dragControls = useDragControls();
+
+  const startDrag = (ev: any) => {
+    dragControls.start(ev, { snapToCursor: true });
+  };
+
   return (
     <Container
       id="preview"
       state={previewState}
-      ref={previewRef}
-      top={top}
-      left={left}
+      drag
+      dragMomentum={false}
+      // ref={previewRef}
+      // top={top}
+      // left={left}
+      style={{ width: containerStyle }}
     >
-      <Dragger />
-      <Header onMouseDown={e => dragMouseDown(e)}>
+      <Dragger
+        onDrag={x => previewWidth.set(x)}
+        onStopDrag={() => setIsResizing(false)}
+        onStartDrag={() => setIsResizing(true)}
+      />
+
+      <Header onPointerDown={startDrag}>
         <button type="button" onClick={() => updatePreviewPosition('closed')}>
           x
         </button>

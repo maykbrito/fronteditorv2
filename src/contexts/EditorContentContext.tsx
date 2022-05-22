@@ -23,7 +23,6 @@ interface EditorContentContextData {
   handleValueChange: (language: string, value: string) => void;
   handleEditorWillMount: (monaco: Monaco) => void;
   editorRef: RefObject<HTMLElement>;
-  appRef: RefObject<HTMLDivElement>;
 }
 
 export const EditorContentContext = createContext(
@@ -35,7 +34,6 @@ export function EditorContentContextProvider({
 }: EditorContextProviderProps) {
   const [app, setApp] = useState(Storage.get());
   const editorRef = useRef(null);
-  const appRef = useRef<HTMLDivElement>(null);
 
   async function handleEditorWillMount(monaco: Monaco) {
     // here is the monaco instance
@@ -90,7 +88,6 @@ export function EditorContentContextProvider({
         handleValueChange,
         handleEditorWillMount,
         editorRef,
-        appRef,
       }}
     >
       {children}

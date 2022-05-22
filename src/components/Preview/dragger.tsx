@@ -1,38 +1,42 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState, useLayoutEffect, useRef, useContext } from 'react';
-import { EditorContentContext } from '../../contexts/EditorContentContext';
+import { MEditorContentContext } from '../MEditor';
 
-export function Dragger() {
-  const { appRef } = useContext(EditorContentContext);
+interface DraggerProps {
+  onDrag: (x: number) => void;
+  onStopDrag: () => void;
+  onStartDrag: () => void;
+}
 
+let initialClientX: number;
+
+export function Dragger({ onDrag, onStopDrag, onStartDrag }: DraggerProps) {
   const draggerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   function dragMouseDown(e: React.MouseEvent): void {
     e.preventDefault();
+    initialClientX = e.clientX;
     setIsDragging(true);
+    onStartDrag();
   }
 
   useLayoutEffect(() => {
     function doDrag(e: MouseEvent): void {
-      if (!isDragging || appRef.current === null) return;
-
+      // if (!isDragging || mEditorRef.current === null) return;
+      if (!isDragging) {
+        return;
+      }
       e.preventDefault();
-
-      appRef.current.classList.add('is-dragging');
-
-      // const maxLeft = e.clientX <= 200;
-      // const maxRight = document.body.offsetWidth - e.clientX <= 200;
-      // const outsideBoundaries = maxLeft || maxRight;
-
-      appRef.current.style.gridTemplateColumns = `${e.clientX}px 1fr`;
+      onDrag(initialClientX - e.clientX);
     }
 
     function stopDrag(): void {
       setIsDragging(false);
 
-      if (appRef.current === null) return;
-      appRef.current.classList.remove('is-dragging');
+      // if (mEditorRef.current === null) return;
+      // mEditorRef.current.classList.remove('is-dragging');
+      onStopDrag();
     }
 
     if (isDragging) {
@@ -44,12 +48,12 @@ export function Dragger() {
       document.removeEventListener('mousemove', doDrag);
       document.removeEventListener('mouseup', stopDrag);
     };
-  });
+  }, [isDragging, onDrag, onStopDrag]);
 
   return (
     <div
       ref={draggerRef}
-      className="dragger"
+      className={`dragger ${isDragging ? 'is-dragging' : ''}`}
       onMouseDown={e => dragMouseDown(e)}
     />
   );
