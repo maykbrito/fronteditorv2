@@ -1,28 +1,22 @@
-import { useState, useCallback, memo } from 'react';
-import CustomEditor from '../CustomEditor';
-import Preview from '../Preview';
+import { useState, useCallback } from 'react'
+import CustomEditor from '../CustomEditor'
+import Preview from '../Preview'
 
-import logoSvg from '../../assets/logo.svg';
-import { Container, Editor } from './styles';
-
-type SelectedTabsProps = 'html' | 'css' | 'javascript' | 'markdown';
-
-type TabButtonProps = {
-  tabName: SelectedTabsProps;
-  displayName: string;
-};
+import logoSvg from '../../assets/logo.svg'
+import { Container, Editor } from './styles'
+import { Tab, TabButton, TabButtonProps } from './TabButton'
 
 interface MEditorProps {
-  float: boolean;
-  logo?: boolean;
-  tabs?: TabButtonProps[] | null;
+  float: boolean
+  logo?: boolean
+  tabs?: TabButtonProps[] | null
 }
 
-export function MEditor({ tabs, logo, float }: MEditorProps): JSX.Element {
-  const [tab, setTab] = useState<SelectedTabsProps>('html');
+export function MEditor({ tabs, logo, float }: MEditorProps) {
+  const [selectedTab, setSelectedTab] = useState<Tab>('html')
 
-  const isFloating = float || false;
-  const showLogo = logo || true;
+  const isFloating = float || false
+  const showLogo = logo || true
 
   const displayTabs = tabs || [
     {
@@ -41,26 +35,14 @@ export function MEditor({ tabs, logo, float }: MEditorProps): JSX.Element {
       tabName: 'markdown',
       displayName: 'MD',
     },
-  ];
+  ]
 
   const getClasses = useCallback(
     (editorName: string) => {
-      return ['editor', tab === editorName ? 'active' : ''].join(' ');
+      return ['editor', selectedTab === editorName ? 'active' : ''].join(' ')
     },
-    [tab]
-  );
-
-  const TabButton = memo(
-    ({ tabName, displayName }: TabButtonProps): JSX.Element => (
-      <button
-        type="button"
-        onClick={() => setTab(tabName)}
-        className={tab === tabName ? 'active' : undefined}
-      >
-        {displayName}
-      </button>
-    )
-  );
+    [selectedTab],
+  )
 
   return (
     <Container $hasFloatingPreview={isFloating}>
@@ -68,21 +50,26 @@ export function MEditor({ tabs, logo, float }: MEditorProps): JSX.Element {
         <nav>
           {showLogo && <img src={logoSvg} alt="Logo" />}
 
-          {displayTabs.map(currentTab => (
+          {displayTabs.map((tab) => (
             <TabButton
-              key={currentTab.tabName}
-              displayName={currentTab.displayName}
-              tabName={currentTab.tabName}
+              key={tab.tabName}
+              displayName={tab.displayName}
+              tabName={tab.tabName}
+              onSelectTab={setSelectedTab}
+              selectedTab={selectedTab}
             />
           ))}
         </nav>
 
         <main>
-          <CustomEditor language={tab} className={getClasses(tab)} />
+          <CustomEditor
+            language={selectedTab}
+            className={getClasses(selectedTab)}
+          />
         </main>
       </Editor>
 
       <Preview isFloating={isFloating} />
     </Container>
-  );
+  )
 }

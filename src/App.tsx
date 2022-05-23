@@ -1,18 +1,18 @@
-import { EditorContentContextProvider } from './contexts/EditorContentContext';
+import { EditorContentContextProvider } from './contexts/EditorContentContext'
 
-import { MEditor } from './components/MEditor';
+import { MEditor } from './components/MEditor'
 
-import './styles/global.css';
+import './styles/global.css'
 
 function AppWrapper() {
-  const params = new URLSearchParams(window.location.search);
-  const float = Boolean(params.get('float'));
+  const params = new URLSearchParams(window.location.search)
+  const float = Boolean(params.get('float'))
 
   return (
     <div className="app">
       <MEditor float={float} />
     </div>
-  );
+  )
 }
 
 export default function App() {
@@ -20,5 +20,5 @@ export default function App() {
     <EditorContentContextProvider>
       <AppWrapper />
     </EditorContentContextProvider>
-  );
+  )
 }

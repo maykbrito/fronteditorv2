@@ -5,109 +5,87 @@ import {
   PointerEvent,
   useCallback,
   useRef,
-} from 'react';
-import { useDragControls, useMotionValue } from 'framer-motion';
-import { CaretDown, CaretUp, DotsSixVertical, Minus, X } from 'phosphor-react';
+} from 'react'
+import { PanInfo, useDragControls, useMotionValue } from 'framer-motion'
+import { CaretDown, CaretUp, DotsSixVertical, Minus, X } from 'phosphor-react'
 
-import { EditorContentContext } from '../../contexts/EditorContentContext';
-import { formatCodeToIframe } from '../../utils/FormatCodeToIframe';
-import { StorageKeys } from '../../utils/Storage';
+import { EditorContentContext } from '../../contexts/EditorContentContext'
+import { formatCodeToIframe } from '../../utils/FormatCodeToIframe'
+import { StorageKeys } from '../../utils/Storage'
 
-import { Container, Header, Iframe, ResizeHandler } from './styles';
-import { base64EncodeUnicode } from '../../utils/base-64-encode-unicode';
+import { Container, Header, Iframe, ResizeHandler } from './styles'
+import { base64EncodeUnicode } from '../../utils/base-64-encode-unicode'
 
-let previewRenderTimer: NodeJS.Timer;
-let resizeTimer: NodeJS.Timer;
+let previewRenderTimer: number
 
-type PreviewStateProps = 'minimized' | 'maximized' | 'closed';
+type PreviewStateProps = 'minimized' | 'maximized' | 'closed'
 
 interface PreviewProps {
-  isFloating: boolean;
+  isFloating: boolean
 }
 
 export default function Preview({ isFloating = false }: PreviewProps) {
-  const previewRef = useRef<HTMLDivElement>(null);
-  const { app } = useContext(EditorContentContext);
+  const previewRef = useRef<HTMLDivElement>(null)
+  const { app } = useContext(EditorContentContext)
 
-  const [isResizing, setIsResizing] = useState(false);
-  const [previewTitle, setPreviewTitle] = useState('index.html');
-  const [src, setSrc] = useState('');
+  const [isResizing, setIsResizing] = useState(false)
+  const [previewTitle, setPreviewTitle] = useState('index.html')
+  const [src, setSrc] = useState('')
 
   const [previewState, setPreviewState] =
-    useState<PreviewStateProps>('minimized');
+    useState<PreviewStateProps>('minimized')
 
   const renderPreview = useCallback(() => {
-    const keys = ['html', 'css', 'javascript'] as StorageKeys[];
+    const keys = ['html', 'css', 'javascript'] as StorageKeys[]
 
     let codeToIframe = keys.reduce((acc: string, language) => {
-      const value = app[language] || '';
-      const formatted = formatCodeToIframe(value);
-      const result = acc + formatted[language];
-      return result;
-    }, '');
+      const value = app[language] || ''
+      const formatted = formatCodeToIframe(value)
+      const result = acc + formatted[language]
+      return result
+    }, '')
 
-    const pageTitle = app.html.match(/<title>(?<title>.+)<\/title>/);
+    const pageTitle = app.html.match(/<title>(?<title>.+)<\/title>/)
 
-    codeToIframe = base64EncodeUnicode(codeToIframe);
-    codeToIframe = `data:text/html;charset=utf-8;base64,${codeToIframe}`;
+    codeToIframe = base64EncodeUnicode(codeToIframe)
+    codeToIframe = `data:text/html;charset=utf-8;base64,${codeToIframe}`
 
     return {
       pageTitle: pageTitle?.groups?.title ?? 'index.html',
       codeToIframe,
-    };
-  }, [app]);
+    }
+  }, [app])
 
   useEffect(() => {
-    const { pageTitle, codeToIframe } = renderPreview();
+    const { pageTitle, codeToIframe } = renderPreview()
 
-    clearTimeout(previewRenderTimer);
+    clearTimeout(previewRenderTimer)
 
     previewRenderTimer = setTimeout(() => {
-      setSrc(codeToIframe);
-      setPreviewTitle(pageTitle);
-    }, 1000);
-  }, [renderPreview]);
+      setSrc(codeToIframe)
+      setPreviewTitle(pageTitle)
+    }, 1000)
+  }, [renderPreview])
 
-  const dragControls = useDragControls();
+  const dragControls = useDragControls()
 
   const startDrag = useCallback(
     (event: PointerEvent) => {
       if (previewState !== 'maximized') {
-        dragControls.start(event);
+        dragControls.start(event)
       }
     },
-    [dragControls, previewState]
-  );
+    [dragControls, previewState],
+  )
 
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver(() => {
-      clearTimeout(resizeTimer);
-
-      resizeTimer = setTimeout(() => {
-        /**
-         * We need this so framer motion can recalculate the drag constraints
-         */
-        // window.dispatchEvent(new Event('resize'));
-      }, 500);
-    });
-
-    if (previewRef.current) {
-      resizeObserver.observe(previewRef.current);
-    }
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [previewRef]);
-
-  const previewWidth = useMotionValue(600);
+  const previewWidth = useMotionValue(600)
 
   const handleResize = useCallback(
-    (event, info) => {
-      previewWidth.set(previewWidth.get() - info.delta.x);
+    (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+      previewWidth.set(previewWidth.get() - info.delta.x)
     },
-    [previewWidth]
-  );
+    [previewWidth],
+  )
 
   return (
     <>
@@ -205,5 +183,5 @@ export default function Preview({ isFloating = false }: PreviewProps) {
         )}
       </Container>
     </>
-  );
+  )
 }

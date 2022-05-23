@@ -5,65 +5,65 @@ import {
   useState,
   useRef,
   RefObject,
-} from 'react';
+} from 'react'
 
-import { Monaco } from '@monaco-editor/react';
-import { emmetHTML } from 'emmet-monaco-es';
-import { omniTheme } from '../utils/EditorCustomTheme';
+import { Monaco } from '@monaco-editor/react'
+import { emmetHTML } from 'emmet-monaco-es'
+import { omniTheme } from '../utils/EditorCustomTheme'
 
-import Storage, { StorageKeys, StorageState } from '../utils/Storage';
+import Storage, { StorageKeys, StorageState } from '../utils/Storage'
 
 interface EditorContextProviderProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 interface EditorContentContextData {
-  app: StorageState;
-  handleEditorDidMount: (editor: any) => void;
-  handleValueChange: (language: string, value: string) => void;
-  handleEditorWillMount: (monaco: Monaco) => void;
-  editorRef: RefObject<HTMLElement>;
+  app: StorageState
+  handleEditorDidMount: (editor: any) => void
+  handleValueChange: (language: string, value: string) => void
+  handleEditorWillMount: (monaco: Monaco) => void
+  editorRef: RefObject<HTMLElement>
 }
 
 export const EditorContentContext = createContext(
-  {} as EditorContentContextData
-);
+  {} as EditorContentContextData,
+)
 
 export function EditorContentContextProvider({
   children,
 }: EditorContextProviderProps) {
-  const [app, setApp] = useState(Storage.get());
-  const editorRef = useRef(null);
+  const [app, setApp] = useState(Storage.get())
+  const editorRef = useRef(null)
 
   async function handleEditorWillMount(monaco: Monaco) {
-    monaco.editor.defineTheme('Omni', omniTheme);
+    monaco.editor.defineTheme('Omni', omniTheme)
   }
 
   const handleValueChange = useCallback(
     async (language: string, value: string) => {
-      setApp(oldState => {
+      setApp((oldState) => {
         // atualização funcional
-        const keys = Object.keys(oldState) as StorageKeys[];
+        const keys = Object.keys(oldState) as StorageKeys[]
         const updatedValues = keys.reduce(
           (acc, key) => {
-            acc[key] = language === key ? value : oldState[key];
-            return acc;
+            acc[key] = language === key ? value : oldState[key]
+            return acc
           },
-          { ...oldState }
-        );
+          { ...oldState },
+        )
 
-        Storage.add(updatedValues);
+        Storage.add(updatedValues)
 
-        return updatedValues;
-      });
+        return updatedValues
+      })
     },
-    []
-  );
+    [],
+  )
 
-  const handleEditorDidMount = useCallback(editor => {
-    editorRef.current = editor;
-    emmetHTML();
-  }, []);
+  const handleEditorDidMount = useCallback((editor) => {
+    editorRef.current = editor
+    emmetHTML()
+  }, [])
 
   return (
     <EditorContentContext.Provider
@@ -77,5 +77,5 @@ export function EditorContentContextProvider({
     >
       {children}
     </EditorContentContext.Provider>
-  );
+  )
 }
