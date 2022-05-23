@@ -10,12 +10,6 @@ body {
   background-color: #191622;
 }
 
-html,
-body,
-#root {
-  height: 100%;
-}
-
 ul {
   margin: 0px;
   padding: 0px;
@@ -24,7 +18,6 @@ ul {
 .app {
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
 nav {

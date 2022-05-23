@@ -10,6 +10,7 @@
     "framer-motion": "^6.3.3",
     "monaco-editor": "^0.33.0",
     "monaco-emmet": "^3.1.1",
+    "phosphor-react": "^1.4.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "^5.0.0",

@@ -1,21 +1,10 @@
-import {
-  useState,
-  useCallback,
-  memo,
-  useRef,
-  ReactNode,
-  RefObject,
-  useContext,
-  createContext,
-} from 'react';
+import { useState, useCallback, memo } from 'react';
 import CustomEditor from '../CustomEditor';
 import Preview from '../Preview';
-import { Dragger } from '../Preview/dragger';
 
 import logoSvg from '../../assets/logo.svg';
-import { Container } from './styles';
+import { Container, Editor } from './styles';
 
-/** TYPES */
 type SelectedTabsProps = 'html' | 'css' | 'javascript' | 'markdown';
 
 type TabButtonProps = {
@@ -29,34 +18,7 @@ interface MEditorProps {
   tabs?: TabButtonProps[] | null;
 }
 
-interface MEditorContextProviderProps {
-  children: ReactNode;
-}
-
-interface MEditorContentContextData {
-  mEditorRef: RefObject<HTMLDivElement>;
-}
-
-export const MEditorContentContext = createContext(
-  {} as MEditorContentContextData
-);
-
-export function MEditorContentContextProvider({
-  children,
-}: MEditorContextProviderProps) {
-  const mEditorRef = useRef<HTMLDivElement>(null);
-  console.log(mEditorRef);
-
-  return (
-    <MEditorContentContext.Provider value={{ mEditorRef }}>
-      {children}
-    </MEditorContentContext.Provider>
-  );
-}
-
 export function MEditor({ tabs, logo, float }: MEditorProps): JSX.Element {
-  const { mEditorRef } = useContext(MEditorContentContext);
-
   const [tab, setTab] = useState<SelectedTabsProps>('html');
 
   const isFloating = float || false;
@@ -101,26 +63,26 @@ export function MEditor({ tabs, logo, float }: MEditorProps): JSX.Element {
   );
 
   return (
-    <MEditorContentContextProvider>
-      <Container ref={mEditorRef} className={isFloating ? '' : 'fixed-right'}>
-        <div>
-          <nav>
-            {showLogo && <img src={logoSvg} alt="Logo" />}
-            {displayTabs.map(currentTab => (
-              <TabButton
-                key={currentTab.tabName}
-                displayName={currentTab.displayName}
-                tabName={currentTab.tabName}
-              />
-            ))}
-          </nav>
-          <main>
-            <CustomEditor language={tab} className={getClasses(tab)} />
-          </main>
-        </div>
+    <Container $hasFloatingPreview={isFloating}>
+      <Editor>
+        <nav>
+          {showLogo && <img src={logoSvg} alt="Logo" />}
 
-        <Preview />
-      </Container>
-    </MEditorContentContextProvider>
+          {displayTabs.map(currentTab => (
+            <TabButton
+              key={currentTab.tabName}
+              displayName={currentTab.displayName}
+              tabName={currentTab.tabName}
+            />
+          ))}
+        </nav>
+
+        <main>
+          <CustomEditor language={tab} className={getClasses(tab)} />
+        </main>
+      </Editor>
+
+      <Preview isFloating={isFloating} />
+    </Container>
   );
 }

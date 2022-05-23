@@ -36,21 +36,6 @@ export function EditorContentContextProvider({
   const editorRef = useRef(null);
 
   async function handleEditorWillMount(monaco: Monaco) {
-    // here is the monaco instance
-    // do something before editor is mounted
-
-    // to extend JS color and tokens
-    // https://github.com/microsoft/monaco-editor/issues/1927
-    // https://monaco-editor-extend-lang-conf.vercel.app/readme.html
-
-    // monaco.languages.setMonarchTokensProvider('javascript', {
-    //   keywords: ['exports'],
-    //   tokenizer: {
-    //     root: [{ include: 'custom' }],
-    //     custom: [['Array', 'greenClass']],
-    //   },
-    // });
-
     monaco.editor.defineTheme('Omni', omniTheme);
   }
 
