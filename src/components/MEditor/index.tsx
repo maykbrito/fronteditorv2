@@ -1,56 +1,80 @@
-import { useState, useCallback, memo } from 'react';
+import { useState, useCallback } from 'react'
+import CustomEditor from '../CustomEditor'
+import Preview from '../Preview'
 
-import CustomEditor from '../CustomEditor';
+import logoSvg from '../../assets/logo.svg'
+import { Container, Editor, Tabs } from './styles'
+import { Tab, TabButton, TabButtonProps } from './TabButton'
 
-import logoSvg from '../../assets/logo.svg';
+interface MEditorProps {
+  shouldFloat: boolean
+  showLogo?: boolean
+  tabs?: TabButtonProps[] | null
+}
 
-type SelectedTabsProps = 'html' | 'css' | 'javascript' | 'markdown';
+export function MEditor({
+  tabs,
+  showLogo = true,
+  shouldFloat = false,
+}: MEditorProps) {
+  const [selectedTab, setSelectedTab] = useState<Tab>('html')
 
-type TabButtonProps = {
-  tabName: SelectedTabsProps;
-  displayName: string;
-};
-
-export function MEditor(): JSX.Element {
-  const [tab, setTab] = useState<SelectedTabsProps>('html');
+  const displayTabs = tabs || [
+    {
+      tabName: 'html',
+      displayName: 'HTML',
+    },
+    {
+      tabName: 'css',
+      displayName: 'CSS',
+    },
+    {
+      tabName: 'javascript',
+      displayName: 'JS',
+    },
+    {
+      tabName: 'markdown',
+      displayName: 'MD',
+    },
+  ]
 
   const getClasses = useCallback(
     (editorName: string) => {
-      return ['editor', tab === editorName ? 'active' : ''].join(' ');
+      return ['editor', selectedTab === editorName ? 'active' : ''].join(' ')
     },
-    [tab]
-  );
-
-  const TabButton = memo(
-    ({ tabName, displayName }: TabButtonProps): JSX.Element => (
-      <button
-        type="button"
-        onClick={() => setTab(tabName)}
-        className={tab === tabName ? 'active' : undefined}
-      >
-        {displayName}
-      </button>
-    )
-  );
+    [selectedTab],
+  )
 
   return (
-    <>
-      <nav>
-        <img src={logoSvg} alt="Logo" />
-        <TabButton displayName="HTML" tabName="html" />
-        <TabButton displayName="CSS" tabName="css" />
-        <TabButton displayName="JS" tabName="javascript" />
-        <TabButton displayName="MD" tabName="markdown" />
-      </nav>
-      <main>
-        <CustomEditor language="html" className={getClasses('html')} />
-        <CustomEditor language="css" className={getClasses('css')} />
-        <CustomEditor
-          language="javascript"
-          className={getClasses('javascript')}
-        />
-        <CustomEditor language="markdown" className={getClasses('markdown')} />
-      </main>
-    </>
-  );
+    <Container $hasFloatingPreview={shouldFloat}>
+      <Editor>
+        <Tabs $hasLogo={showLogo}>
+          {showLogo && (
+            <div className="logo-container">
+              <img src={logoSvg} alt="Logo" />
+            </div>
+          )}
+
+          {displayTabs.map((tab) => (
+            <TabButton
+              key={tab.tabName}
+              displayName={tab.displayName}
+              tabName={tab.tabName}
+              onSelectTab={setSelectedTab}
+              selectedTab={selectedTab}
+            />
+          ))}
+        </Tabs>
+
+        <main>
+          <CustomEditor
+            language={selectedTab}
+            className={getClasses(selectedTab)}
+          />
+        </main>
+      </Editor>
+
+      <Preview isFloating={shouldFloat} />
+    </Container>
+  )
 }

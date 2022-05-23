@@ -1,155 +1,207 @@
-import { useState, useEffect, useRef, useContext } from 'react';
-import { EditorContentContext } from '../../contexts/EditorContentContext';
-import { formatCodeToIframe } from '../../utils/FormatCodeToIframe';
-import { StorageKeys } from '../../utils/Storage';
+import {
+  useState,
+  useEffect,
+  useContext,
+  PointerEvent,
+  useCallback,
+  useRef,
+  ChangeEvent,
+} from 'react'
+import { PanInfo, useDragControls, useMotionValue } from 'framer-motion'
+import { CaretDown, CaretUp, DotsSixVertical, Minus, X } from 'phosphor-react'
 
-import { Container, Header, Iframe } from './styles';
+import {
+  EditorContentContext,
+  editorHotkeys,
+} from '../../contexts/EditorContentContext'
+import { formatCodeToIframe } from '../../utils/FormatCodeToIframe'
+import { StorageKeys } from '../../utils/Storage'
 
-let pos1 = 0;
-let pos2 = 0;
-let pos3 = 0;
-let pos4 = 0;
+import { Container, Header, Iframe, ResizeHandler } from './styles'
+import { base64EncodeUnicode } from '../../utils/base-64-encode-unicode'
 
-let timer: NodeJS.Timer;
+let previewRenderTimer: NodeJS.Timeout
 
-function b64EncodeUnicode(str: string): string {
-  // https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
-  // first we use encodeURIComponent to get percent-encoded UTF-8,
-  // then we convert the percent encodings into raw bytes which
-  // can be fed into btoa.
+type PreviewStateProps = 'minimized' | 'maximized' | 'closed'
 
-  const toSolidBytes = (match: string, p1: string): string => {
-    return String.fromCharCode(Number(`0x${p1}`));
-  };
-
-  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, toSolidBytes));
+interface PreviewProps {
+  isFloating: boolean
 }
 
-type PreviewStateProps = 'minimized' | 'maximized' | 'closed';
+export default function Preview({ isFloating = false }: PreviewProps) {
+  const previewRef = useRef<HTMLDivElement>(null)
+  const { app } = useContext(EditorContentContext)
 
-export default function Preview(): JSX.Element {
-  const { app } = useContext(EditorContentContext);
+  const [isResizing, setIsResizing] = useState(false)
+  const [isLiveReloadEnabled, setIsLiveReloadEnabled] = useState(true)
+  const [previewTitle, setPreviewTitle] = useState('index.html')
+  const [src, setSrc] = useState('')
 
-  const previewRef = useRef<HTMLDivElement>(null);
-  const [src, setSrc] = useState('');
-
-  const [isDragging, setIsDragging] = useState(false);
   const [previewState, setPreviewState] =
-    useState<PreviewStateProps>('minimized');
+    useState<PreviewStateProps>('minimized')
 
-  const [top, setTop] = useState('');
-  const [left, setLeft] = useState('');
-  const [zIndex, setZIndex] = useState(0);
-
-  function dragMouseDown(e: React.MouseEvent): void {
-    e.preventDefault();
-
-    setIsDragging(true);
-    // // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-  }
-
-  useEffect(() => {
-    const keys = ['html', 'css', 'javascript'] as StorageKeys[];
+  const renderPreview = useCallback(() => {
+    const keys = ['html', 'css', 'javascript'] as StorageKeys[]
 
     let codeToIframe = keys.reduce((acc: string, language) => {
-      const value = app[language] || '';
-      const formated = formatCodeToIframe(value);
-      const result = acc + formated[language];
-      return result;
-    }, '');
+      const value = app[language] || ''
+      const formatted = formatCodeToIframe(value)
+      const result = acc + formatted[language]
+      return result
+    }, '')
 
-    codeToIframe = b64EncodeUnicode(codeToIframe);
-    codeToIframe = `data:text/html;charset=utf-8;base64,${codeToIframe}`;
+    const pageTitle = app.html.match(/<title>(?<title>.+)<\/title>/)
 
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      setSrc(codeToIframe);
-    }, 1000);
-  }, [app]);
+    codeToIframe = base64EncodeUnicode(codeToIframe)
+    codeToIframe = `data:text/html;charset=utf-8;base64,${codeToIframe}`
 
-  function updatePreviewPosition(state: PreviewStateProps): void {
-    if (previewRef.current) {
-      previewRef.current.style.width = '';
-      previewRef.current.style.height = '';
-    }
-
-    setTop('');
-    setLeft('');
-    setPreviewState(state);
-  }
+    setSrc(codeToIframe)
+    setPreviewTitle(pageTitle?.groups?.title ?? 'index.html')
+  }, [app])
 
   useEffect(() => {
-    function doDrag(e: MouseEvent): void {
-      if (!isDragging) return;
+    if (isLiveReloadEnabled) {
+      clearTimeout(previewRenderTimer)
 
-      e.preventDefault();
-
-      // calculate the new cursor position:
-      pos1 = pos3 - e.clientX;
-      pos2 = pos4 - e.clientY;
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-
-      // // set the element's new position:
-      const offsetTop = previewRef.current?.offsetTop ?? 0;
-      const offsetLeft = previewRef.current?.offsetLeft ?? 0;
-
-      setTop(`${offsetTop - pos2}px`);
-      setLeft(`${offsetLeft - pos1}px`);
-
-      setZIndex(-1);
+      previewRenderTimer = setTimeout(() => {
+        renderPreview()
+      }, 1000)
     }
+  }, [renderPreview, isLiveReloadEnabled])
 
-    function stopDrag(): void {
-      setIsDragging(false);
-      setZIndex(0);
-    }
-
-    if (isDragging) {
-      document.addEventListener('mousemove', doDrag);
-      document.addEventListener('mouseup', stopDrag);
-    }
+  useEffect(() => {
+    editorHotkeys.addEventListener('save', renderPreview)
 
     return () => {
-      document.removeEventListener('mousemove', doDrag);
-      document.removeEventListener('mouseup', stopDrag);
-    };
-  }, [isDragging]);
+      editorHotkeys.removeEventListener('save', renderPreview)
+    }
+  }, [renderPreview])
+
+  const dragControls = useDragControls()
+
+  const startDrag = useCallback(
+    (event: PointerEvent) => {
+      if (previewState !== 'maximized') {
+        dragControls.start(event)
+      }
+    },
+    [dragControls, previewState],
+  )
+
+  const previewWidth = useMotionValue(600)
+
+  const handleResize = useCallback(
+    (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+      previewWidth.set(previewWidth.get() - info.delta.x)
+    },
+    [previewWidth],
+  )
+
+  function handleToggleLiveReload(event: ChangeEvent<HTMLInputElement>) {
+    setIsLiveReloadEnabled(event.target.checked)
+  }
 
   return (
-    <Container
-      id="preview"
-      state={previewState}
-      ref={previewRef}
-      top={top}
-      left={left}
-    >
-      <Header onMouseDown={e => dragMouseDown(e)}>
-        <button type="button" onClick={() => updatePreviewPosition('closed')}>
-          x
-        </button>
-        <button
-          type="button"
-          onClick={() => updatePreviewPosition('minimized')}
+    <>
+      <Container
+        id="preview"
+        ref={previewRef}
+        $previewState={previewState}
+        drag={isFloating}
+        dragMomentum={false}
+        dragElastic={false}
+        dragListener={false}
+        dragControls={dragControls}
+        whileDrag={{ cursor: 'grabbing', opacity: 0.6 }}
+        animate={isFloating ? previewState : undefined}
+        style={!isFloating ? { width: previewWidth } : {}}
+        transition={{ duration: 0.2 }}
+        variants={{
+          maximized: {
+            x: 0,
+            y: 0,
+            left: 24,
+            top: 24,
+            bottom: 24,
+            right: 24,
+          },
+          minimized: {
+            left: 'calc(100% - 600px - 48px)',
+            top: 48,
+            bottom: 'unset',
+            right: 'unset',
+          },
+        }}
+      >
+        <Header
+          $isFloating={isFloating}
+          $canBeDraggable={isFloating && previewState !== 'maximized'}
+          onPointerDown={isFloating ? startDrag : undefined}
         >
-          -
-        </button>
-        <button
-          type="button"
-          onClick={() => updatePreviewPosition('maximized')}
-        >
-          +
-        </button>
-      </Header>
-      <Iframe
-        src={src}
-        style={{ zIndex }}
-        id="result"
-        frameBorder="0"
-        allow="camera; microphone; fullscreen; accelerometer; autoplay; geolocation; payment; midi; magnetometer; gyroscope; document-domain; encrypted-media; picture-in-picture; screen-wake-lock"
-      />
-    </Container>
-  );
+          {isFloating && (
+            <div className="actions">
+              <button
+                type="button"
+                onClick={() => setPreviewState('closed')}
+                title="Fechar"
+              >
+                <X weight="bold" size={8} aria-label="Fechar" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setPreviewState('minimized')}
+                title="Minimizar"
+              >
+                <Minus weight="bold" size={8} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setPreviewState('maximized')}
+                title="Maximizar"
+              >
+                <CaretUp className="arrow-up" weight="fill" size={12} />
+                <CaretDown className="arrow-down" weight="fill" size={12} />
+              </button>
+            </div>
+          )}
+
+          <span>{previewTitle}</span>
+
+          <div className="live-reload">
+            <span>Live reload?</span>
+            <input
+              type="checkbox"
+              title="Habilitar/desabilitar recarregamento automático"
+              onChange={handleToggleLiveReload}
+              checked={isLiveReloadEnabled}
+            />
+          </div>
+        </Header>
+
+        <div className="preview-iframe">
+          <Iframe
+            src={src}
+            id="result"
+            frameBorder="0"
+            allow="camera; microphone; fullscreen; accelerometer; autoplay; geolocation; payment; midi; magnetometer; gyroscope; document-domain; encrypted-media; picture-in-picture; screen-wake-lock"
+          />
+        </div>
+
+        {!isFloating && (
+          <ResizeHandler
+            $isResizing={isResizing}
+            drag="x"
+            dragMomentum={false}
+            dragElastic={false}
+            dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
+            onDrag={handleResize}
+            onDragStart={() => setIsResizing(true)}
+            onDragEnd={() => setIsResizing(false)}
+          >
+            <DotsSixVertical size={12} />
+          </ResizeHandler>
+        )}
+      </Container>
+    </>
+  )
 }
