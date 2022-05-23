@@ -6,11 +6,11 @@ import './styles/global.css'
 
 function AppWrapper() {
   const params = new URLSearchParams(window.location.search)
-  const float = Boolean(params.get('float'))
+  const shouldFloat = Boolean(params.get('float'))
 
   return (
     <div className="app">
-      <MEditor float={float} />
+      <MEditor shouldFloat={shouldFloat} showLogo={false} />
     </div>
   )
 }

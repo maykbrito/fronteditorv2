@@ -3,20 +3,21 @@ import CustomEditor from '../CustomEditor'
 import Preview from '../Preview'
 
 import logoSvg from '../../assets/logo.svg'
-import { Container, Editor } from './styles'
+import { Container, Editor, Tabs } from './styles'
 import { Tab, TabButton, TabButtonProps } from './TabButton'
 
 interface MEditorProps {
-  float: boolean
-  logo?: boolean
+  shouldFloat: boolean
+  showLogo?: boolean
   tabs?: TabButtonProps[] | null
 }
 
-export function MEditor({ tabs, logo, float }: MEditorProps) {
+export function MEditor({
+  tabs,
+  showLogo = true,
+  shouldFloat = false,
+}: MEditorProps) {
   const [selectedTab, setSelectedTab] = useState<Tab>('html')
-
-  const isFloating = float || false
-  const showLogo = logo || true
 
   const displayTabs = tabs || [
     {
@@ -45,10 +46,14 @@ export function MEditor({ tabs, logo, float }: MEditorProps) {
   )
 
   return (
-    <Container $hasFloatingPreview={isFloating}>
+    <Container $hasFloatingPreview={shouldFloat}>
       <Editor>
-        <nav>
-          {showLogo && <img src={logoSvg} alt="Logo" />}
+        <Tabs $hasLogo={showLogo}>
+          {showLogo && (
+            <div className="logo-container">
+              <img src={logoSvg} alt="Logo" />
+            </div>
+          )}
 
           {displayTabs.map((tab) => (
             <TabButton
@@ -59,7 +64,7 @@ export function MEditor({ tabs, logo, float }: MEditorProps) {
               selectedTab={selectedTab}
             />
           ))}
-        </nav>
+        </Tabs>
 
         <main>
           <CustomEditor
@@ -69,7 +74,7 @@ export function MEditor({ tabs, logo, float }: MEditorProps) {
         </main>
       </Editor>
 
-      <Preview isFloating={isFloating} />
+      <Preview isFloating={shouldFloat} />
     </Container>
   )
 }

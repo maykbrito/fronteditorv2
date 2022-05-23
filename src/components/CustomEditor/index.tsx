@@ -31,7 +31,12 @@ const CustomEditor = ({ className, language }: CustomEditorProps) => {
           minimap: {
             enabled: false,
           },
+          rulers: [80, 120],
+          renderLineHighlight: 'gutter',
           fontSize: 16,
+          lineHeight: 26,
+          fontFamily: 'JetBrains Mono, Menlo, monospace',
+          fontLigatures: true,
           'semanticHighlighting.enabled': true,
           bracketPairColorization: {
             enabled: true,
