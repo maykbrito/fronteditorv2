@@ -1,17 +1,11 @@
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useState,
-  useRef,
-  RefObject,
-} from 'react'
+import { createContext, ReactNode, useCallback, useState } from 'react'
 
-import { Monaco } from '@monaco-editor/react'
+import { EditorProps, Monaco, OnMount } from '@monaco-editor/react'
 import { emmetHTML } from 'emmet-monaco-es'
 import { omniTheme } from '../utils/EditorCustomTheme'
 
 import Storage, { StorageKeys, StorageState } from '../utils/Storage'
+import { KeyMod, KeyCode } from 'monaco-editor'
 
 interface EditorContextProviderProps {
   children: ReactNode
@@ -19,21 +13,22 @@ interface EditorContextProviderProps {
 
 interface EditorContentContextData {
   app: StorageState
-  handleEditorDidMount: (editor: any) => void
+  handleEditorDidMount: EditorProps['onMount']
   handleValueChange: (language: string, value: string) => void
-  handleEditorWillMount: (monaco: Monaco) => void
-  editorRef: RefObject<HTMLElement>
+  handleEditorWillMount: EditorProps['beforeMount']
 }
 
 export const EditorContentContext = createContext(
   {} as EditorContentContextData,
 )
 
+export const editorHotkeys = new EventTarget()
+export const saveEvent = new CustomEvent('save')
+
 export function EditorContentContextProvider({
   children,
 }: EditorContextProviderProps) {
   const [app, setApp] = useState(Storage.get())
-  const editorRef = useRef(null)
 
   async function handleEditorWillMount(monaco: Monaco) {
     monaco.editor.defineTheme('Omni', omniTheme)
@@ -42,8 +37,8 @@ export function EditorContentContextProvider({
   const handleValueChange = useCallback(
     async (language: string, value: string) => {
       setApp((oldState) => {
-        // atualização funcional
         const keys = Object.keys(oldState) as StorageKeys[]
+
         const updatedValues = keys.reduce(
           (acc, key) => {
             acc[key] = language === key ? value : oldState[key]
@@ -60,8 +55,11 @@ export function EditorContentContextProvider({
     [],
   )
 
-  const handleEditorDidMount = useCallback((editor) => {
-    editorRef.current = editor
+  const handleEditorDidMount = useCallback<OnMount>((editor) => {
+    editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyS, () => {
+      editorHotkeys.dispatchEvent(saveEvent)
+    })
+
     emmetHTML()
   }, [])
 
@@ -72,7 +70,6 @@ export function EditorContentContextProvider({
         handleEditorDidMount,
         handleValueChange,
         handleEditorWillMount,
-        editorRef,
       }}
     >
       {children}

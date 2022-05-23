@@ -1,4 +1,4 @@
-import { editor } from 'monaco-editor';
+import { editor } from 'monaco-editor'
 
 const colors = {
   dark: '#191622',
@@ -8,7 +8,7 @@ const colors = {
   gray: '#9999aa',
   purple: '#988bc7',
   yellow: '#e7de79',
-};
+}
 
 export const omniTheme: editor.IStandaloneThemeData = {
   inherit: true,
@@ -31,4 +31,4 @@ export const omniTheme: editor.IStandaloneThemeData = {
     { token: 'string.css', foreground: colors.yellow },
     { token: 'string.js', foreground: colors.yellow },
   ],
-};
+}

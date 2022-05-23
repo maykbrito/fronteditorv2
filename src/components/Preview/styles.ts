@@ -1,7 +1,11 @@
-import { motion } from 'framer-motion';
-import styled, { css } from 'styled-components';
+import { motion } from 'framer-motion'
+import styled, { css } from 'styled-components'
 
-export const Container = styled(motion.div)`
+interface ContainerProps {
+  $previewState: 'closed' | 'minimized' | 'maximized'
+}
+
+export const Container = styled(motion.div)<ContainerProps>`
   --orange: #ffb82a;
   --green: #25c73a;
   --red: #ff4b46;
@@ -12,17 +16,41 @@ export const Container = styled(motion.div)`
   border-radius: 8px 8px 0 0;
   box-shadow: 0px 2px 8px -4px rgba(0, 0, 0, 0.3);
   overflow: auto;
-  resize: both;
-  top: 0;
-  right: 0;
 
   display: flex;
   flex-direction: column;
-`;
+
+  ${(props) =>
+    props.$previewState === 'closed' &&
+    css`
+      width: 110px;
+      height: 32px;
+      overflow: hidden;
+    `}
+
+  .preview-iframe {
+    resize: both;
+    overflow: auto;
+
+    ${(props) =>
+      props.$previewState === 'maximized' &&
+      css`
+        resize: none;
+        width: 100% !important;
+        height: 100% !important;
+      `}
+
+    ${(props) =>
+      props.$previewState === 'closed' &&
+      css`
+        display: none;
+      `}
+  }
+`
 
 interface HeaderProps {
-  $canBeDraggable: boolean;
-  $previewState: 'closed' | 'minimized' | 'maximized';
+  $canBeDraggable: boolean
+  $isFloating: boolean
 }
 
 export const Header = styled(motion.div)<HeaderProps>`
@@ -31,10 +59,17 @@ export const Header = styled(motion.div)<HeaderProps>`
   width: 100%;
   height: 32px;
   padding: 0 16px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 100px 1fr 100px;
   align-items: center;
 
-  ${props =>
+  ${(props) =>
+    !props.$isFloating &&
+    css`
+      grid-template-columns: 1fr 100px;
+    `}
+
+  ${(props) =>
     props.$canBeDraggable &&
     css`
       cursor: move;
@@ -91,36 +126,45 @@ export const Header = styled(motion.div)<HeaderProps>`
     }
   }
 
-  span {
-    display: block;
-    margin: 0 auto;
+  .live-reload {
     font-family: sans-serif;
     font-size: 13px;
     color: #aaa;
 
-    ${props =>
-      props.$previewState === 'closed' &&
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  > span {
+    font-family: sans-serif;
+    font-size: 13px;
+    color: #aaa;
+    justify-self: center;
+
+    ${(props) =>
+      !props.$isFloating &&
       css`
-        display: none;
+        justify-self: flex-start;
       `}
 
-    ${props =>
+    ${(props) =>
       props.$canBeDraggable &&
       css`
         padding-right: 52px;
       `}
   }
-`;
+`
 
 export const Iframe = styled.iframe`
   width: 100%;
   flex: 1;
   position: relative;
   z-index: 5;
-`;
+`
 
 interface ResizeHandlerProps {
-  $isResizing: boolean;
+  $isResizing: boolean
 }
 
 export const ResizeHandler = styled(motion.div)<ResizeHandlerProps>`
@@ -135,9 +179,9 @@ export const ResizeHandler = styled(motion.div)<ResizeHandlerProps>`
   display: flex;
   align-items: center;
 
-  ${props =>
+  ${(props) =>
     props.$isResizing &&
     css`
       width: 100%;
     `}
-`;
+`

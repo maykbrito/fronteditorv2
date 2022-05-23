@@ -5,18 +5,22 @@ import {
   PointerEvent,
   useCallback,
   useRef,
+  ChangeEvent,
 } from 'react'
 import { PanInfo, useDragControls, useMotionValue } from 'framer-motion'
 import { CaretDown, CaretUp, DotsSixVertical, Minus, X } from 'phosphor-react'
 
-import { EditorContentContext } from '../../contexts/EditorContentContext'
+import {
+  EditorContentContext,
+  editorHotkeys,
+} from '../../contexts/EditorContentContext'
 import { formatCodeToIframe } from '../../utils/FormatCodeToIframe'
 import { StorageKeys } from '../../utils/Storage'
 
 import { Container, Header, Iframe, ResizeHandler } from './styles'
 import { base64EncodeUnicode } from '../../utils/base-64-encode-unicode'
 
-let previewRenderTimer: number
+let previewRenderTimer: NodeJS.Timeout
 
 type PreviewStateProps = 'minimized' | 'maximized' | 'closed'
 
@@ -29,6 +33,7 @@ export default function Preview({ isFloating = false }: PreviewProps) {
   const { app } = useContext(EditorContentContext)
 
   const [isResizing, setIsResizing] = useState(false)
+  const [isLiveReloadEnabled, setIsLiveReloadEnabled] = useState(true)
   const [previewTitle, setPreviewTitle] = useState('index.html')
   const [src, setSrc] = useState('')
 
@@ -50,21 +55,26 @@ export default function Preview({ isFloating = false }: PreviewProps) {
     codeToIframe = base64EncodeUnicode(codeToIframe)
     codeToIframe = `data:text/html;charset=utf-8;base64,${codeToIframe}`
 
-    return {
-      pageTitle: pageTitle?.groups?.title ?? 'index.html',
-      codeToIframe,
-    }
+    setSrc(codeToIframe)
+    setPreviewTitle(pageTitle?.groups?.title ?? 'index.html')
   }, [app])
 
   useEffect(() => {
-    const { pageTitle, codeToIframe } = renderPreview()
+    if (isLiveReloadEnabled) {
+      clearTimeout(previewRenderTimer)
 
-    clearTimeout(previewRenderTimer)
+      previewRenderTimer = setTimeout(() => {
+        renderPreview()
+      }, 1000)
+    }
+  }, [renderPreview, isLiveReloadEnabled])
 
-    previewRenderTimer = setTimeout(() => {
-      setSrc(codeToIframe)
-      setPreviewTitle(pageTitle)
-    }, 1000)
+  useEffect(() => {
+    editorHotkeys.addEventListener('save', renderPreview)
+
+    return () => {
+      editorHotkeys.removeEventListener('save', renderPreview)
+    }
   }, [renderPreview])
 
   const dragControls = useDragControls()
@@ -87,11 +97,16 @@ export default function Preview({ isFloating = false }: PreviewProps) {
     [previewWidth],
   )
 
+  function handleToggleLiveReload(event: ChangeEvent<HTMLInputElement>) {
+    setIsLiveReloadEnabled(event.target.checked)
+  }
+
   return (
     <>
       <Container
         id="preview"
         ref={previewRef}
+        $previewState={previewState}
         drag={isFloating}
         dragMomentum={false}
         dragElastic={false}
@@ -100,35 +115,27 @@ export default function Preview({ isFloating = false }: PreviewProps) {
         whileDrag={{ cursor: 'grabbing', opacity: 0.6 }}
         animate={isFloating ? previewState : undefined}
         style={!isFloating ? { width: previewWidth } : {}}
-        transition={{ duration: 0 }}
+        transition={{ duration: 0.2 }}
         variants={{
           maximized: {
-            width: 'calc(100% - 48px - 48px)',
-            height: 'calc(100% - 48px - 48px)',
-            x: -48,
-            y: 48,
-            position: 'fixed',
-          },
-          minimized: {
             x: 0,
             y: 0,
-            width: 600,
-            height: 400,
-            right: 48,
-            top: 48,
+            left: 24,
+            top: 24,
+            bottom: 24,
+            right: 24,
           },
-          closed: {
-            width: 100,
-            height: 32,
-            overflow: 'hidden',
-            right: 48,
+          minimized: {
+            left: 'calc(100% - 600px - 48px)',
             top: 48,
+            bottom: 'unset',
+            right: 'unset',
           },
         }}
       >
         <Header
+          $isFloating={isFloating}
           $canBeDraggable={isFloating && previewState !== 'maximized'}
-          $previewState={previewState}
           onPointerDown={isFloating ? startDrag : undefined}
         >
           {isFloating && (
@@ -157,15 +164,28 @@ export default function Preview({ isFloating = false }: PreviewProps) {
               </button>
             </div>
           )}
+
           <span>{previewTitle}</span>
+
+          <div className="live-reload">
+            <span>Live reload?</span>
+            <input
+              type="checkbox"
+              title="Habilitar/desabilitar recarregamento automático"
+              onChange={handleToggleLiveReload}
+              checked={isLiveReloadEnabled}
+            />
+          </div>
         </Header>
 
-        <Iframe
-          src={src}
-          id="result"
-          frameBorder="0"
-          allow="camera; microphone; fullscreen; accelerometer; autoplay; geolocation; payment; midi; magnetometer; gyroscope; document-domain; encrypted-media; picture-in-picture; screen-wake-lock"
-        />
+        <div className="preview-iframe">
+          <Iframe
+            src={src}
+            id="result"
+            frameBorder="0"
+            allow="camera; microphone; fullscreen; accelerometer; autoplay; geolocation; payment; midi; magnetometer; gyroscope; document-domain; encrypted-media; picture-in-picture; screen-wake-lock"
+          />
+        </div>
 
         {!isFloating && (
           <ResizeHandler
