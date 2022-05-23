@@ -4,6 +4,7 @@ import Editor from '@monaco-editor/react'
 import Storage from '../../utils/Storage'
 
 import { EditorContentContext } from '../../contexts/EditorContentContext'
+import { Loading } from './styles'
 
 type CustomEditorProps = {
   language: 'html' | 'css' | 'javascript' | 'markdown'
@@ -20,6 +21,7 @@ const CustomEditor = ({ className, language }: CustomEditorProps) => {
         height="100%"
         width="100%"
         theme="Omni"
+        loading={<Loading>Carregando</Loading>}
         language={language}
         value={Storage.getItem(language) || ''}
         beforeMount={handleEditorWillMount}
