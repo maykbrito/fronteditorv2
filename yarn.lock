@@ -251,39 +251,12 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
-"@emmetio/abbreviation@^0.6.0":
-  version "0.6.6"
-  resolved "https://registry.yarnpkg.com/@emmetio/abbreviation/-/abbreviation-0.6.6.tgz#03cd13983c22315d2b65fc66a99ad8c3fa44a8ce"
-  integrity sha512-jsh1Hyc7iY+5tADcn6GlIF/kxEbglPW+JE/FcCb4NNYqDr2swXvEGWd+DN3porBA67VDfDZVAwThhvYTsHKrRw==
-  dependencies:
-    "@emmetio/node" "^0.1.2"
-    "@emmetio/stream-reader" "^2.2.0"
-    "@emmetio/stream-reader-utils" "^0.1.0"
-
-"@emmetio/abbreviation@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@emmetio/abbreviation/-/abbreviation-0.7.0.tgz#f65b2024699378bfa042607027a236b240ddc009"
-  integrity sha512-CjLWtUCyh2nRgG/TkBruPTNI03i+b2Bau9UP7g0zgWdeV6bBjNC8CxX106ZdMekK3I/RmTrWuzVV9b+7nwqKXA==
-  dependencies:
-    "@emmetio/node" "^0.1.2"
-    "@emmetio/stream-reader" "^2.2.0"
-    "@emmetio/stream-reader-utils" "^0.1.0"
-
 "@emmetio/abbreviation@^2.2.3":
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@emmetio/abbreviation/-/abbreviation-2.2.3.tgz#2b3c0383c1a4652f677d5b56fb3f1616fe16ef10"
   integrity sha512-87pltuCPt99aL+y9xS6GPZ+Wmmyhll2WXH73gG/xpGcQ84DRnptBsI2r0BeIQ0EB/SQTOe2ANPqFqj3Rj5FOGA==
   dependencies:
     "@emmetio/scanner" "^1.0.0"
-
-"@emmetio/css-abbreviation@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@emmetio/css-abbreviation/-/css-abbreviation-0.4.0.tgz#5da9b313f3625e3d7539065c5ebeca83891e4dac"
-  integrity sha512-8b4+ZoBElpNMedO+gGCiEX/xGv8Do0NYUvsdVNv6O0fuP9octnxyzjb7HFGqDJ7hFzVORAfzOhpjyL8y2dw9AQ==
-  dependencies:
-    "@emmetio/node" "^0.1.2"
-    "@emmetio/stream-reader" "^2.2.0"
-    "@emmetio/stream-reader-utils" "^0.1.0"
 
 "@emmetio/css-abbreviation@^2.1.4":
   version "2.1.4"
@@ -292,125 +265,10 @@
   dependencies:
     "@emmetio/scanner" "^1.0.0"
 
-"@emmetio/css-snippets-resolver@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@emmetio/css-snippets-resolver/-/css-snippets-resolver-0.4.0.tgz#6477ead6d25d838e685fa5c84c25aafa576479dc"
-  integrity sha512-H0eOed2KljA/nQ64j3BKwAkAFliku5LAD58o4pvS3A9tZ2g3ctEpJ+61po78SZE1+Q+gRA3CGtC6rxtk7QlGPA==
-
-"@emmetio/expand-abbreviation@^0.7.1":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@emmetio/expand-abbreviation/-/expand-abbreviation-0.7.3.tgz#0cba9b018de4e7969cf28928f376a2ad5dd3e061"
-  integrity sha512-qlgYLsvzwkT17YmIGWUxyz4HeiGhxpKYmKe6067frHgUiSRWbIUY8es9B6J9ygveOye+VbeiULy7ae+7YF2xpQ==
-  dependencies:
-    "@emmetio/abbreviation" "^0.7.0"
-    "@emmetio/css-abbreviation" "^0.4.0"
-    "@emmetio/css-snippets-resolver" "^0.4.0"
-    "@emmetio/html-snippets-resolver" "^0.1.4"
-    "@emmetio/html-transform" "^0.3.9"
-    "@emmetio/lorem" "^1.0.1"
-    "@emmetio/markup-formatters" "^0.4.1"
-    "@emmetio/output-profile" "^0.1.6"
-    "@emmetio/snippets" "^0.2.9"
-    "@emmetio/snippets-registry" "^0.3.1"
-    "@emmetio/stylesheet-formatters" "^0.2.1"
-    "@emmetio/variable-resolver" "^0.2.1"
-
-"@emmetio/field-parser@^0.3.0":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@emmetio/field-parser/-/field-parser-0.3.1.tgz#00ff922b2ccc23929d825ad83a9e4fbd094fc0f9"
-  integrity sha512-A26JuVvZRUBb/rNpaDdmBB2jaN3spx2JRLJQfkskz9CRbiSW9ZE/M7etKKMunV5UWUfSlygFaFUclT3y+UNDxw==
-  dependencies:
-    "@emmetio/stream-reader" "^2.2.0"
-    "@emmetio/stream-reader-utils" "^0.1.0"
-
-"@emmetio/html-snippets-resolver@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@emmetio/html-snippets-resolver/-/html-snippets-resolver-0.1.4.tgz#b33ad3fa78fd78d64b94bf88a9fb68b3ad8e8e7e"
-  integrity sha512-KqskLHiFGLHOQeiGxPJqkdgtgu+ZzxqzZh6n/CSPWBNjUard9dmHZHFL+jgDhk/y6nKl5G7ynxeKVU8k+yKDvw==
-  dependencies:
-    "@emmetio/abbreviation" "^0.6.0"
-
-"@emmetio/html-transform@^0.3.9":
-  version "0.3.10"
-  resolved "https://registry.yarnpkg.com/@emmetio/html-transform/-/html-transform-0.3.10.tgz#f5edbeabe8712e393709298384d7f412fe0aaa7b"
-  integrity sha512-GxKcFDCkHQAre4lBRr4hbyYfRhAtTqDrcnwDi2n97CX6bKhdfL9p7fZIobtNtjX+ZdCVs36x4vizpiChEYOArg==
-  dependencies:
-    "@emmetio/implicit-tag" "^1.0.0"
-
-"@emmetio/implicit-tag@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@emmetio/implicit-tag/-/implicit-tag-1.0.0.tgz#f826d4e1fc51da39434c2326b6f6d0e2b2e7b419"
-  integrity sha512-FEuVxAbcayYrzXE06prKdFZ7jjILKnFirSadmy4gVzU/c/jsoBjmP63KXXYh8re6vxJa9uhNATRz//SxoJw1lA==
-
-"@emmetio/lorem@^1.0.1":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@emmetio/lorem/-/lorem-1.0.2.tgz#8de6a5718f39172ea7d22532a5b0d3bbd10083dc"
-  integrity sha512-oUGR22inLtyIV6sreAYmkDSZaZO2mkiL3DKKD7sI9diHlT3ZyjBB480KCFKLjWUVRZDEQsuKeNMxsMVgZlc24w==
-  dependencies:
-    "@emmetio/implicit-tag" "^1.0.0"
-
-"@emmetio/markup-formatters@^0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@emmetio/markup-formatters/-/markup-formatters-0.4.1.tgz#49ac7e5ba5b75ff0ca4f75fc97b12b63ac7129cb"
-  integrity sha512-RR+QPozAAL7pnFL5Nl3g5qXxUF2qw54oGl0njmBTZYYwf96LDJ2p6DfRhy8uCenRjMMgUijjQ31wtmDR4cobDA==
-  dependencies:
-    "@emmetio/field-parser" "^0.3.0"
-    "@emmetio/output-renderer" "^0.1.2"
-
-"@emmetio/node@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@emmetio/node/-/node-0.1.2.tgz#4231d538c45481a51835fc2aba3f5d9fc129634c"
-  integrity sha512-rykoUNl5M0f2H2TNLY8JgiZFgeL12NHRG65dYyKU83A6qi3KhGSTb4mK4WdnwC/xQz4QWWu3nPa/PanTi55NRQ==
-
-"@emmetio/output-profile@^0.1.6":
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/@emmetio/output-profile/-/output-profile-0.1.6.tgz#15de23135f4b57225d192cd6efd73d8ffc9dd380"
-  integrity sha512-7bIwR3YHmTEnyy76X4l9e5+wXE+lah2E1AIoeDyKFIfVujztXNqcv+BmPcV4LRl1+V6Qir8hIex+F2nz7PTPCg==
-
-"@emmetio/output-renderer@^0.1.1", "@emmetio/output-renderer@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@emmetio/output-renderer/-/output-renderer-0.1.2.tgz#0ece11acce9298507868aed21ab5253e1eb082f8"
-  integrity sha512-+N7J5L8UHJVXESSpbFTQ11tJwTgorJsIiJeep1YqFz66N8WutHbX5lRqv1H7O0Ve+jrAMo7VFCurfHxGB174yA==
-  dependencies:
-    "@emmetio/field-parser" "^0.3.0"
-
 "@emmetio/scanner@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@emmetio/scanner/-/scanner-1.0.0.tgz#065b2af6233fe7474d44823e3deb89724af42b5f"
   integrity sha512-8HqW8EVqjnCmWXVpqAOZf+EGESdkR27odcMMMGefgKXtar00SoYNSryGv//TELI4T3QFsECo78p+0lmalk/CFA==
-
-"@emmetio/snippets-registry@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@emmetio/snippets-registry/-/snippets-registry-0.3.1.tgz#ec0e8a122fe9683659ce69a22396f4136b940d20"
-  integrity sha512-Mot1w4oRzEDCGNTaeA1DZbvQD1d0z5fm1c8aySJ5dB8Zegg7BvHGB4EB8NPyo5KnK6RnEECKk2vPp6ofJaz49Q==
-
-"@emmetio/snippets@^0.2.9":
-  version "0.2.12"
-  resolved "https://registry.yarnpkg.com/@emmetio/snippets/-/snippets-0.2.12.tgz#607a98c9d628f570a0f35961622f6b1f4d381b72"
-  integrity sha512-xgjkyLZ4Ez8kN2qGNY59MadoIlStIohn80/FUSk+/DyNp/0SVpAe+/uQ5qJ4Mo4DDzfnkEkfCBMO/yq4SKoB0w==
-
-"@emmetio/stream-reader-utils@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@emmetio/stream-reader-utils/-/stream-reader-utils-0.1.0.tgz#244cb02c77ec2e74f78a9bd318218abc9c500a61"
-  integrity sha512-ZsZ2I9Vzso3Ho/pjZFsmmZ++FWeEd/txqybHTm4OgaZzdS8V9V/YYWQwg5TC38Z7uLWUV1vavpLLbjJtKubR1A==
-
-"@emmetio/stream-reader@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@emmetio/stream-reader/-/stream-reader-2.2.0.tgz#46cffea119a0a003312a21c2d9b5628cb5fcd442"
-  integrity sha512-fXVXEyFA5Yv3M3n8sUGT7+fvecGrZP4k6FnWWMSZVQf69kAq0LLpaBQLGcPR30m3zMmKYhECP4k/ZkzvhEW5kw==
-
-"@emmetio/stylesheet-formatters@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@emmetio/stylesheet-formatters/-/stylesheet-formatters-0.2.1.tgz#d27be6664a6e18b395eca07f6157aa65800b267f"
-  integrity sha512-1XHNVx6S3ra7dnv12CNT6Gq15VyT2Fkrhgp2yCj4g2jJJflVHU6t++VfjoK6w36hGYu0AqZL9TCa/8hLj2YjQw==
-  dependencies:
-    "@emmetio/field-parser" "^0.3.0"
-    "@emmetio/output-renderer" "^0.1.1"
-
-"@emmetio/variable-resolver@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@emmetio/variable-resolver/-/variable-resolver-0.2.1.tgz#ce11b51584669a340986690cf0ec269e44c63fba"
-  integrity sha512-IBBC9VNRJHKOPvicJx2FF4IgxFh8rud06siuv/ctLKuM8MU/kwOPuPOMD2rsbghIobiavIiLAsAoQWPtk1gNFQ==
 
 "@emotion/is-prop-valid@^0.8.2":
   version "0.8.8"
@@ -1578,6 +1436,11 @@ fast-levenshtein@^2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
+fast-plist@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/fast-plist/-/fast-plist-0.1.2.tgz#a45aff345196006d406ca6cdcd05f69051ef35b8"
+  integrity sha1-pFr/NFGWAG1AbKbNzQX2kFHvNbg=
+
 fastq@^1.6.0:
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/fastq/-/fastq-1.13.0.tgz#616760f88a7526bdfc596b7cab8c18938c36b98c"
@@ -2040,6 +1903,13 @@ loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
+lru-cache@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-5.1.1.tgz#1da27e6710271947695daf6848e847f01d84b920"
+  integrity sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==
+  dependencies:
+    yallist "^3.0.2"
+
 lru-cache@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-6.0.0.tgz#6d6fe6570ebd96aaf90fcad1dafa3b2566db3a94"
@@ -2072,23 +1942,22 @@ minimist@^1.1.1, minimist@^1.2.0, minimist@^1.2.6:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
   integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
 
-monaco-editor@^0.14.3:
-  version "0.14.3"
-  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.14.3.tgz#7cc4a4096a3821f52fea9b10489b527ef3034e22"
-  integrity sha512-RhaO4xXmWn/p0WrkEOXe4PoZj6xOcvDYjoAh0e1kGUrQnP1IOpc0m86Ceuaa2CLEMDINqKijBSmqhvBQnsPLHQ==
+monaco-editor-textmate@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/monaco-editor-textmate/-/monaco-editor-textmate-3.0.0.tgz#a90517380d5e52304aef780eebeab9f687ab9b67"
+  integrity sha512-4BK3ual4WllRpiQBDcBO8NKdbk4ukdBtnl23cRYvu1eNWOWKYOBM0rYac50HvFClSbtd5GMezLPjkaim0iM7sw==
 
 monaco-editor@^0.33.0:
   version "0.33.0"
   resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.33.0.tgz#842e244f3750a2482f8a29c676b5684e75ff34af"
   integrity sha512-VcRWPSLIUEgQJQIE0pVT8FcGBIgFoxz7jtqctE+IiCxWugD0DwgyQBcZBhdSrdMC84eumoqMZsGl2GTreOzwqw==
 
-monaco-emmet@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/monaco-emmet/-/monaco-emmet-3.1.1.tgz#8a09252ec9dd750e6abd9c81b798274aaab1fb60"
-  integrity sha512-yP39HQnLeD30GmOtsHXH5GtuXjyhNdxz6LiU2+WneLSN1YDzHJz5ZGTWnRDBveTcweAgEOja5TiR8s7+13HyAA==
+monaco-textmate@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/monaco-textmate/-/monaco-textmate-3.0.1.tgz#b6d26d266aa12edaff7069dae0d6e3747cba5cd7"
+  integrity sha512-ZxxY3OsqUczYP1sGqo97tu+CJmMBwuSW+dL0WEBdDhOZ5G1zntw72hvBc68ZQAirosWvbDKgN1dL5k173QtFww==
   dependencies:
-    "@emmetio/expand-abbreviation" "^0.7.1"
-    monaco-editor "^0.14.3"
+    fast-plist "^0.1.2"
 
 ms@2.0.0:
   version "2.0.0"
@@ -2201,6 +2070,13 @@ once@^1.3.0:
   integrity sha1-WDsap3WWHUsROsF9nFC6753Xa9E=
   dependencies:
     wrappy "1"
+
+onigasm@^2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/onigasm/-/onigasm-2.2.5.tgz#cc4d2a79a0fa0b64caec1f4c7ea367585a676892"
+  integrity sha512-F+th54mPc0l1lp1ZcFMyL/jTs2Tlq4SqIHKIXGZOR/VkHkF9A7Fr5rRr5+ZG/lWeRsyrClLYRq7s/yFQ/XhWCA==
+  dependencies:
+    lru-cache "^5.1.1"
 
 optionator@^0.9.1:
   version "0.9.1"
@@ -2737,11 +2613,6 @@ vite@^2.9.9:
   optionalDependencies:
     fsevents "~2.3.2"
 
-web-vitals@^2.1.4:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-2.1.4.tgz#76563175a475a5e835264d373704f9dde718290c"
-  integrity sha512-sVWcwhU5mX6crfI5Vd2dC4qchyTqxV8URinzt25XqVh+bHEPGH4C3NPrNionCP7Obx59wrYEbNlw4Z8sjALzZg==
-
 which-boxed-primitive@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/which-boxed-primitive/-/which-boxed-primitive-1.0.2.tgz#13757bc89b209b049fe5d86430e21cf40a89a8e6"
@@ -2774,6 +2645,11 @@ xtend@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/xtend/-/xtend-4.0.2.tgz#bb72779f5fa465186b1f438f674fa347fdb5db54"
   integrity sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==
+
+yallist@^3.0.2:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/yallist/-/yallist-3.1.1.tgz#dbb7daf9bfd8bac9ab45ebf602b8cbad0d5d08fd"
+  integrity sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==
 
 yallist@^4.0.0:
   version "4.0.0"

@@ -14,11 +14,12 @@
     "emmet-monaco-es": "^5.1.0",
     "framer-motion": "^6.3.3",
     "monaco-editor": "^0.33.0",
-    "monaco-emmet": "^3.1.1",
+    "monaco-editor-textmate": "^3.0.0",
+    "monaco-textmate": "^3.0.1",
+    "onigasm": "^2.2.5",
     "phosphor-react": "^1.4.1",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "web-vitals": "^2.1.4"
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
     "@rocketseat/eslint-config": "^1.1.3",

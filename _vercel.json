@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { 
+      "source": "/((?!src).*)", "destination": "/"
+    },
+    { 
+      "source": "/src/:path*", "destination": "/src/:path*"
+    }
+  ]
+}
