@@ -1,10 +1,11 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import CustomEditor from '../CustomEditor'
 import Preview from '../Preview'
 
 import logoSvg from '../../assets/logo.svg'
-import { Container, Editor, Tabs } from './styles'
 import { Tab, TabButton, TabButtonProps } from './TabButton'
+import { motion } from 'framer-motion'
+import classNames from 'classnames'
 
 interface MEditorProps {
   shouldFloat: boolean
@@ -38,20 +39,17 @@ export function MEditor({
     },
   ]
 
-  const getClasses = useCallback(
-    (editorName: string) => {
-      return ['editor', selectedTab === editorName ? 'active' : ''].join(' ')
-    },
-    [selectedTab],
-  )
-
   return (
-    <Container $hasFloatingPreview={shouldFloat}>
-      <Editor>
-        <Tabs $hasLogo={showLogo}>
+    <motion.div className="w-screen h-screen overflow-hidden relative flex">
+      <div className="flex-1 flex flex-col h-full">
+        <nav
+          className={classNames('flex items-center gap-1 py-2 bg-[#13111b]', {
+            [`pl-8`]: !showLogo,
+          })}
+        >
           {showLogo && (
-            <div className="logo-container">
-              <img src={logoSvg} alt="Logo" />
+            <div className="w-20 text-center">
+              <img src={logoSvg} className="w-4 inline" alt="" />
             </div>
           )}
 
@@ -64,17 +62,20 @@ export function MEditor({
               selectedTab={selectedTab}
             />
           ))}
-        </Tabs>
+        </nav>
 
-        <main>
-          <CustomEditor
-            language={selectedTab}
-            className={getClasses(selectedTab)}
-          />
+        <main
+          className={
+            !shouldFloat
+              ? 'flex flex-1 overflow-hidden relative mt-3 h-screen'
+              : ''
+          }
+        >
+          <CustomEditor language={selectedTab} className="absolute inset-0" />
         </main>
-      </Editor>
+      </div>
 
       <Preview isFloating={shouldFloat} />
-    </Container>
+    </motion.div>
   )
 }
