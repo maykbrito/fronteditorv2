@@ -10,6 +10,8 @@ import monacoOmniTheme from '../assets/monaco-themes/monaco-omni.json'
 import { wireTmGrammars } from 'monaco-editor-textmate'
 import { registry } from '../utils/monaco-tm-registry'
 
+import onigasmWASM from '../assets/onigasm.wasm?url'
+
 interface EditorContextProviderProps {
   children: ReactNode
 }
@@ -57,7 +59,7 @@ export function EditorContentContextProvider({
   )
 
   const loadTmGrammars = useCallback(async () => {
-    await loadWASM('src/assets/onigasm.wasm')
+    await loadWASM(onigasmWASM)
 
     const grammars = new Map()
 
