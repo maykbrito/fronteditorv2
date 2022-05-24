@@ -18,6 +18,7 @@ interface EditorContextProviderProps {
 
 interface EditorContentContextData {
   app: StorageState
+  isEditorReady: boolean
   handleEditorDidMount: EditorProps['onMount']
   handleValueChange: (language: string, value: string) => void
 }
@@ -36,6 +37,7 @@ export function EditorContentContextProvider({
   const editorRef = useRef<editor.IStandaloneCodeEditor>()
 
   const [app, setApp] = useState(Storage.get())
+  const [isEditorReady, setIsEditorReady] = useState(false)
 
   const handleValueChange = useCallback(
     async (language: string, value: string) => {
@@ -97,9 +99,9 @@ export function EditorContentContextProvider({
 
       loadTmGrammars().then(() => {
         monacoRef.current?.editor.setTheme('custom-theme')
+        emmetHTML()
+        setIsEditorReady(true)
       })
-
-      emmetHTML()
     },
     [loadTmGrammars],
   )
@@ -108,6 +110,7 @@ export function EditorContentContextProvider({
     <EditorContentContext.Provider
       value={{
         app,
+        isEditorReady,
         handleEditorDidMount,
         handleValueChange,
       }}
