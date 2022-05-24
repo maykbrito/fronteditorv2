@@ -1,24 +1,17 @@
 import { EditorContentContextProvider } from './contexts/EditorContentContext'
-
 import { MEditor } from './components/MEditor'
 
 import './styles/global.css'
 
-function AppWrapper() {
+export function App() {
   const params = new URLSearchParams(window.location.search)
   const shouldFloat = Boolean(params.get('float'))
 
   return (
-    <div className="app">
-      <MEditor shouldFloat={shouldFloat} showLogo={false} />
-    </div>
-  )
-}
-
-export default function App() {
-  return (
     <EditorContentContextProvider>
-      <AppWrapper />
+      <div className="flex flex-col">
+        <MEditor shouldFloat={shouldFloat} showLogo />
+      </div>
     </EditorContentContextProvider>
   )
 }

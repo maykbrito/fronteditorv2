@@ -1,3 +1,5 @@
+import classNames from 'classnames'
+
 export type Tab = 'html' | 'css' | 'javascript' | 'markdown'
 
 export type TabButtonProps = {
@@ -17,7 +19,12 @@ export function TabButton({
     <button
       type="button"
       onClick={() => onSelectTab(tabName)}
-      className={selectedTab === tabName ? 'active' : undefined}
+      className={classNames(
+        'bg-transparent border-0 text-zinc-100 text-sm outline-none py-1.5 px-3 cursor-pointer rounded hover:bg-white/10',
+        {
+          [`bg-white/20`]: tabName === selectedTab,
+        },
+      )}
     >
       {displayName}
     </button>

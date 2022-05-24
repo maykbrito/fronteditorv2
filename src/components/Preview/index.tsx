@@ -5,10 +5,9 @@ import {
   PointerEvent,
   useCallback,
   useRef,
-  ChangeEvent,
 } from 'react'
-import { PanInfo, useDragControls, useMotionValue } from 'framer-motion'
-import { CaretDown, CaretUp, DotsSixVertical, Minus, X } from 'phosphor-react'
+import { motion, PanInfo, useDragControls, useMotionValue } from 'framer-motion'
+import { DotsSixVertical } from 'phosphor-react'
 
 import {
   EditorContentContext,
@@ -17,12 +16,11 @@ import {
 import { formatCodeToIframe } from '../../utils/FormatCodeToIframe'
 import { StorageKeys } from '../../utils/Storage'
 
-import { Container, Header, Iframe, ResizeHandler } from './styles'
 import { base64EncodeUnicode } from '../../utils/base-64-encode-unicode'
+import classNames from 'classnames'
+import { Header, WindowState } from './Header'
 
 let previewRenderTimer: NodeJS.Timeout
-
-type PreviewStateProps = 'minimized' | 'maximized' | 'closed'
 
 interface PreviewProps {
   isFloating: boolean
@@ -32,13 +30,12 @@ export default function Preview({ isFloating = false }: PreviewProps) {
   const previewRef = useRef<HTMLDivElement>(null)
   const { app } = useContext(EditorContentContext)
 
-  const [isResizing, setIsResizing] = useState(false)
   const [isLiveReloadEnabled, setIsLiveReloadEnabled] = useState(true)
   const [previewTitle, setPreviewTitle] = useState('index.html')
   const [src, setSrc] = useState('')
 
-  const [previewState, setPreviewState] =
-    useState<PreviewStateProps>('minimized')
+  const [previewWindowState, setPreviewWindowState] =
+    useState<WindowState>('minimized')
 
   const renderPreview = useCallback(() => {
     const keys = ['html', 'css', 'javascript'] as StorageKeys[]
@@ -79,13 +76,13 @@ export default function Preview({ isFloating = false }: PreviewProps) {
 
   const dragControls = useDragControls()
 
-  const startDrag = useCallback(
+  const handlePreviewDragStart = useCallback(
     (event: PointerEvent) => {
-      if (previewState !== 'maximized') {
+      if (previewWindowState !== 'maximized') {
         dragControls.start(event)
       }
     },
-    [dragControls, previewState],
+    [dragControls, previewWindowState],
   )
 
   const previewWidth = useMotionValue(600)
@@ -97,23 +94,22 @@ export default function Preview({ isFloating = false }: PreviewProps) {
     [previewWidth],
   )
 
-  function handleToggleLiveReload(event: ChangeEvent<HTMLInputElement>) {
-    setIsLiveReloadEnabled(event.target.checked)
-  }
-
   return (
     <>
-      <Container
-        id="preview"
+      <motion.div
+        className={classNames('bg-white flex flex-col', {
+          [`absolute z-10 rounded-t-lg overflow-auto shadow`]: isFloating,
+          [`relative h-full rounded-none`]: !isFloating,
+          [`h-8 w-28 overflow-hidden`]: previewWindowState === 'closed',
+        })}
         ref={previewRef}
-        $previewState={previewState}
         drag={isFloating}
         dragMomentum={false}
         dragElastic={false}
         dragListener={false}
         dragControls={dragControls}
         whileDrag={{ cursor: 'grabbing', opacity: 0.6 }}
-        animate={isFloating ? previewState : undefined}
+        animate={isFloating ? previewWindowState : undefined}
         style={!isFloating ? { width: previewWidth } : {}}
         transition={{ duration: 0.2 }}
         variants={{
@@ -134,74 +130,42 @@ export default function Preview({ isFloating = false }: PreviewProps) {
         }}
       >
         <Header
-          $isFloating={isFloating}
-          $canBeDraggable={isFloating && previewState !== 'maximized'}
-          onPointerDown={isFloating ? startDrag : undefined}
+          isFloating={isFloating}
+          canBeDraggable={isFloating && previewWindowState !== 'maximized'}
+          windowTitle={previewTitle}
+          onDragStart={handlePreviewDragStart}
+          onLiveReloadToggle={setIsLiveReloadEnabled}
+          onWindowStateChanged={setPreviewWindowState}
+        />
+
+        <div
+          className={classNames('resize overflow-hidden h-full', {
+            [`resize-none w-full h-full`]: previewWindowState === 'maximized',
+            [`hidden`]: previewWindowState === 'closed',
+          })}
         >
-          {isFloating && (
-            <div className="actions">
-              <button
-                type="button"
-                onClick={() => setPreviewState('closed')}
-                title="Fechar"
-              >
-                <X weight="bold" size={8} aria-label="Fechar" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setPreviewState('minimized')}
-                title="Minimizar"
-              >
-                <Minus weight="bold" size={8} />
-              </button>
-              <button
-                type="button"
-                onClick={() => setPreviewState('maximized')}
-                title="Maximizar"
-              >
-                <CaretUp className="arrow-up" weight="fill" size={12} />
-                <CaretDown className="arrow-down" weight="fill" size={12} />
-              </button>
-            </div>
-          )}
-
-          <span>{previewTitle}</span>
-
-          <div className="live-reload">
-            <span>Live reload?</span>
-            <input
-              type="checkbox"
-              title="Habilitar/desabilitar recarregamento automático"
-              onChange={handleToggleLiveReload}
-              checked={isLiveReloadEnabled}
-            />
-          </div>
-        </Header>
-
-        <div className="preview-iframe">
-          <Iframe
+          <iframe
             src={src}
             id="result"
             frameBorder="0"
             allow="camera; microphone; fullscreen; accelerometer; autoplay; geolocation; payment; midi; magnetometer; gyroscope; document-domain; encrypted-media; picture-in-picture; screen-wake-lock"
+            className="w-full h-full flex-1 relative z-10"
           />
         </div>
 
         {!isFloating && (
-          <ResizeHandler
-            $isResizing={isResizing}
+          <motion.div
+            className="top-0 w-3 h-full z-20 absolute cursor-col-resize flex items-center active:w-full"
             drag="x"
             dragMomentum={false}
             dragElastic={false}
             dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
             onDrag={handleResize}
-            onDragStart={() => setIsResizing(true)}
-            onDragEnd={() => setIsResizing(false)}
           >
             <DotsSixVertical size={12} />
-          </ResizeHandler>
+          </motion.div>
         )}
-      </Container>
+      </motion.div>
     </>
   )
 }

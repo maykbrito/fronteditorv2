@@ -1,34 +1,8 @@
-html,
-body,
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
 
 body {
-  background-color: #191622;
+  @apply bg-[#191622];
 }
 
-ul {
-  margin: 0px;
-  padding: 0px;
-}
-
-.app {
-  display: flex;
-  flex-direction: column;
-}
-
-.editor {
-  visibility: hidden;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-}
-
-.editor.active {
-  visibility: visible;
-}
