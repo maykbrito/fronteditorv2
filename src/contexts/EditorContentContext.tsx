@@ -57,7 +57,7 @@ export function EditorContentContextProvider({
   )
 
   const loadTmGrammars = useCallback(async () => {
-    await loadWASM('node_modules/onigasm/lib/onigasm.wasm')
+    await loadWASM('src/assets/onigasm.wasm')
 
     const grammars = new Map()
 
