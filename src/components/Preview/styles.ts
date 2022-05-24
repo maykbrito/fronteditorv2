@@ -1,8 +1,8 @@
-import { motion } from "framer-motion";
-import styled, { css } from "styled-components";
+import { motion } from 'framer-motion'
+import styled, { css } from 'styled-components'
 
 interface ContainerProps {
-  $previewState: "closed" | "minimized" | "maximized";
+  $previewState: 'closed' | 'minimized' | 'maximized'
 }
 
 export const Container = styled(motion.div)<ContainerProps>`
@@ -21,7 +21,7 @@ export const Container = styled(motion.div)<ContainerProps>`
   flex-direction: column;
 
   ${(props) =>
-    props.$previewState === "closed" &&
+    props.$previewState === 'closed' &&
     css`
       width: 110px;
       height: 32px;
@@ -34,7 +34,7 @@ export const Container = styled(motion.div)<ContainerProps>`
     height: 100%;
 
     ${(props) =>
-      props.$previewState === "maximized" &&
+      props.$previewState === 'maximized' &&
       css`
         resize: none;
         width: 100% !important;
@@ -42,16 +42,16 @@ export const Container = styled(motion.div)<ContainerProps>`
       `}
 
     ${(props) =>
-      props.$previewState === "closed" &&
+      props.$previewState === 'closed' &&
       css`
         display: none;
       `}
   }
-`;
+`
 
 interface HeaderProps {
-  $canBeDraggable: boolean;
-  $isFloating: boolean;
+  $canBeDraggable: boolean
+  $isFloating: boolean
 }
 
 export const Header = styled(motion.div)<HeaderProps>`
@@ -155,7 +155,7 @@ export const Header = styled(motion.div)<HeaderProps>`
         padding-right: 52px;
       `}
   }
-`;
+`
 
 export const Iframe = styled.iframe`
   width: 100%;
@@ -163,10 +163,10 @@ export const Iframe = styled.iframe`
   flex: 1;
   position: relative;
   z-index: 5;
-`;
+`
 
 interface ResizeHandlerProps {
-  $isResizing: boolean;
+  $isResizing: boolean
 }
 
 export const ResizeHandler = styled(motion.div)<ResizeHandlerProps>`
@@ -186,4 +186,4 @@ export const ResizeHandler = styled(motion.div)<ResizeHandlerProps>`
     css`
       width: 100%;
     `}
-`;
+`

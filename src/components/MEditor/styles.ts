@@ -1,8 +1,8 @@
-import { motion } from "framer-motion";
-import styled, { css } from "styled-components";
+import { motion } from 'framer-motion'
+import styled, { css } from 'styled-components'
 
 interface ContainerProps {
-  $hasFloatingPreview: boolean;
+  $hasFloatingPreview: boolean
 }
 
 export const Container = styled(motion.div)<ContainerProps>`
@@ -33,7 +33,7 @@ export const Container = styled(motion.div)<ContainerProps>`
         top: unset;
       }
     `}
-`;
+`
 
 export const Editor = styled.div`
   flex: 1;
@@ -45,10 +45,10 @@ export const Editor = styled.div`
     flex: 1;
     position: relative;
   }
-`;
+`
 
 interface TabsProps {
-  $hasLogo: boolean;
+  $hasLogo: boolean
 }
 
 export const Tabs = styled.nav<TabsProps>`
@@ -77,7 +77,7 @@ export const Tabs = styled.nav<TabsProps>`
     background: transparent;
     border: none;
     color: #e1e1e6;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 14px;
     outline: none;
     padding: 0px 6px;
@@ -94,4 +94,4 @@ export const Tabs = styled.nav<TabsProps>`
   button.active {
     background-color: rgba(255, 255, 255, 0.2);
   }
-`;
+`
