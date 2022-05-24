@@ -66,10 +66,12 @@ export function EditorContentContextProvider({
     grammars.set('css', 'source.css')
     grammars.set('html', 'source.html')
     grammars.set('javascript', 'source.js')
+    grammars.set('markdown', 'source.md')
 
     monacoRef.current?.languages.register({ id: 'css' })
     monacoRef.current?.languages.register({ id: 'html' })
     monacoRef.current?.languages.register({ id: 'javascript' })
+    monacoRef.current?.languages.register({ id: 'markdown' })
 
     await wireTmGrammars(
       monacoRef.current!,

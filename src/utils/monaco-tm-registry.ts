@@ -22,10 +22,15 @@ export const registry = new Registry({
         format: 'json',
         content: await (await fetch(htmlGrammar)).text(),
       }
-    } else {
+    } else if (scopeName === 'source.md') {
       return {
         format: 'json',
         content: await (await fetch(mdGrammar)).text(),
+      }
+    } else {
+      return {
+        format: 'json',
+        content: '{}',
       }
     }
   },
