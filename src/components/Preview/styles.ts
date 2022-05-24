@@ -30,7 +30,8 @@ export const Container = styled(motion.div)<ContainerProps>`
 
   .preview-iframe {
     resize: both;
-    overflow: auto;
+    overflow: hidden;
+    height: 100%;
 
     ${(props) =>
       props.$previewState === 'maximized' &&
@@ -158,6 +159,7 @@ export const Header = styled(motion.div)<HeaderProps>`
 
 export const Iframe = styled.iframe`
   width: 100%;
+  height: 100%;
   flex: 1;
   position: relative;
   z-index: 5;
