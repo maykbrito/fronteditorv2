@@ -57,7 +57,10 @@ export function EditorContentContextProvider({
     const hasDataInStorage = keys.some((key) => currentApp[key] !== '')
 
     if (isGistViewOnly || !hasDataInStorage) {
-      getGist().then(setApp)
+      getGist().then((gist) => {
+        setApp(gist)
+        Storage.add(gist)
+      })
     }
   }, [])
 
