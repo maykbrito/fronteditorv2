@@ -1,4 +1,11 @@
-import { createContext, ReactNode, useCallback, useRef, useState } from 'react'
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { loadWASM } from 'onigasm'
 
 import { EditorProps, Monaco, OnMount } from '@monaco-editor/react'
@@ -38,6 +45,22 @@ export function EditorContentContextProvider({
 
   const [app, setApp] = useState(Storage.get())
   const [isEditorReady, setIsEditorReady] = useState(false)
+
+  useEffect(() => {
+    let foundDataInStorage = false
+    if (!Storage.gistIsViewOnly()) {
+      const keys = Object.keys(app) as StorageKeys[]
+      foundDataInStorage = !!keys.find((key) => app[key] !== '')
+    }
+
+    if (foundDataInStorage) {
+      return
+    }
+
+    // // no data in storage, let's look for it in gist
+    // // or none at all
+    Storage.getGist().then((gist) => gist && setApp(gist))
+  }, [])
 
   const handleValueChange = useCallback(
     async (language: string, value: string) => {
