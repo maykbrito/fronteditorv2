@@ -1,10 +1,18 @@
-import { createContext, ReactNode, useCallback, useRef, useState } from 'react'
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { loadWASM } from 'onigasm'
 
 import { EditorProps, Monaco, OnMount } from '@monaco-editor/react'
 import { emmetHTML } from 'emmet-monaco-es'
 
 import Storage, { StorageKeys, StorageState } from '../utils/Storage'
+import { doesURLIncludesGist, getGist, isGistViewOnly } from '../utils/Gist'
 import { KeyMod, KeyCode, editor } from 'monaco-editor'
 import monacoOmniTheme from '../assets/monaco-themes/monaco-omni.json'
 import { wireTmGrammars } from 'monaco-editor-textmate'
@@ -36,24 +44,31 @@ export function EditorContentContextProvider({
   const monacoRef = useRef<Monaco>()
   const editorRef = useRef<editor.IStandaloneCodeEditor>()
 
-  const [app, setApp] = useState(Storage.get())
+  const [app, setApp] = useState<Record<StorageKeys, string>>(Storage.get())
   const [isEditorReady, setIsEditorReady] = useState(false)
+
+  useEffect(() => {
+    if (!doesURLIncludesGist) {
+      return
+    }
+
+    const currentApp = Storage.get()
+    const keys = Object.keys(currentApp) as StorageKeys[]
+    const isAppDataEmpty = keys.some((key) => currentApp[key] !== '')
+
+    if (isGistViewOnly || isAppDataEmpty) {
+      getGist().then(setApp)
+    }
+  }, [])
+
+  useEffect(() => {
+    Storage.add(app)
+  }, [app])
 
   const handleValueChange = useCallback(
     async (language: string, value: string) => {
       setApp((oldState) => {
-        const keys = Object.keys(oldState) as StorageKeys[]
-
-        const updatedValues = keys.reduce(
-          (acc, key) => {
-            acc[key] = language === key ? value : oldState[key]
-            return acc
-          },
-          { ...oldState },
-        )
-
-        Storage.add(updatedValues)
-
+        const updatedValues = { ...oldState, [language]: value }
         return updatedValues
       })
     },
