@@ -2,6 +2,8 @@ export const doesURLIncludesGist = window.location.pathname.includes('/gists')
 export const isGistViewOnly = window.location.pathname.includes('/view')
 
 export const getGist = async () => {
+  const { pathname } = window.location
+
   const gist = await fetch(
     `https://api.github.com/gists/${pathname.replace(
       /(\/gists\/|\/view)/gi,
