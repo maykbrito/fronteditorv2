@@ -61,14 +61,11 @@ export function EditorContentContextProvider({
     }
   }, [])
 
-  useEffect(() => {
-    Storage.add(app)
-  }, [app])
-
   const handleValueChange = useCallback(
     async (language: string, value: string) => {
       setApp((oldState) => {
         const updatedValues = { ...oldState, [language]: value }
+        Storage.add(updatedValues)
         return updatedValues
       })
     },
