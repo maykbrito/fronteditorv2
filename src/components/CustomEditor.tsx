@@ -24,6 +24,7 @@ const CustomEditor = ({ className, language }: CustomEditorProps) => {
         loading={<span className="font-sans text-zinc-700">Carregando</span>}
         language={language}
         value={Storage.getItem(language) || ''}
+        path={`index.${language.toLowerCase()}`}
         onMount={handleEditorDidMount}
         onChange={(value) => {
           handleValueChange(language, value || '')
