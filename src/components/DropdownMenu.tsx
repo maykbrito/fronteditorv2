@@ -21,13 +21,13 @@ export function DropdownMenu() {
     const script = document.createElement('script')
     script.type = 'text/javascript'
     script.src = './index.js'
+    script.defer = true
 
     const style = document.createElement('link')
     style.rel = 'stylesheet'
     style.href = './index.css'
 
     header.appendChild(script)
-    header.append('\n')
     header.appendChild(style)
 
     return parsed
