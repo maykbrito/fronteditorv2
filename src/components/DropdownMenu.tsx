@@ -33,7 +33,7 @@ export function DropdownMenu() {
     return parsed
   }
 
-  function handleDownloadAsZip() {
+  async function handleDownloadAsZip() {
     const parser = new DOMParser()
 
     const parsedHTML = parser.parseFromString(app.html, 'text/html')
@@ -49,12 +49,12 @@ export function DropdownMenu() {
     zip.file('index.js', app.javascript)
     zip.file('index.md', app.markdown)
 
-    zip.generateAsync({ type: 'blob' }).then(function (content) {
-      saveAs(
-        content,
-        `frontend-editor-${Math.random().toString(36).slice(2)}.zip`,
-      )
-    })
+    const content = await zip.generateAsync({ type: 'blob' })
+
+    saveAs(
+      content,
+      `frontend-editor-${Math.random().toString(36).slice(2)}.zip`,
+    )
   }
 
   return (
