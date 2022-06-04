@@ -15,8 +15,8 @@ const zip = new JSZip()
 export function DropdownMenu() {
   const { app } = useContext(EditorContentContext)
 
-  function addScriptsToParsedHtmlHeader(parsed: any) {
-    const header = parsed.querySelector('head')
+  function addScriptsToParsedHtmlHeader(parsed: Document) {
+    const head = parsed.querySelector('head')!
 
     const script = document.createElement('script')
     script.type = 'text/javascript'
@@ -27,8 +27,8 @@ export function DropdownMenu() {
     style.rel = 'stylesheet'
     style.href = './index.css'
 
-    header.appendChild(script)
-    header.appendChild(style)
+    head.appendChild(script)
+    head.appendChild(style)
 
     return parsed
   }
@@ -51,10 +51,7 @@ export function DropdownMenu() {
 
     const content = await zip.generateAsync({ type: 'blob' })
 
-    saveAs(
-      content,
-      `frontend-editor-${Math.random().toString(36).slice(2)}.zip`,
-    )
+    saveAs(content, `frontend-editor-${new Date().toISOString()}.zip`)
   }
 
   return (
