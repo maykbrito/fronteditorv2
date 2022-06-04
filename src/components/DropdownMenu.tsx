@@ -15,7 +15,7 @@ const zip = new JSZip()
 export function DropdownMenu() {
   const { app } = useContext(EditorContentContext)
 
-  function addScriptsToParsedHtmlHeader(parsed: Document) {
+  function addScriptsToParsedHtmlHead(parsed: Document) {
     const head = parsed.querySelector('head')!
 
     const script = document.createElement('script')
@@ -38,7 +38,7 @@ export function DropdownMenu() {
 
     const parsedHTML = parser.parseFromString(app.html, 'text/html')
 
-    const htmlWithScripts = addScriptsToParsedHtmlHeader(parsedHTML)
+    const htmlWithScripts = addScriptsToParsedHtmlHead(parsedHTML)
 
     zip.file(
       'index.html',
