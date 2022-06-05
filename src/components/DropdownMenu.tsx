@@ -40,9 +40,11 @@ export function DropdownMenu() {
 
     const htmlWithScripts = addScriptsToParsedHtmlHead(parsedHTML)
 
+    const doctype = '<!DOCTYPE html>'
+
     zip.file(
       'index.html',
-      pretty(new XMLSerializer().serializeToString(htmlWithScripts)),
+      pretty(doctype + htmlWithScripts.documentElement.outerHTML),
     )
 
     zip.file('index.css', app.css)
