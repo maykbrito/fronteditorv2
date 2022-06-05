@@ -4,11 +4,9 @@ import Preview from '../Preview'
 
 import { Tab, TabButton, TabButtonProps } from './TabButton'
 import { motion } from 'framer-motion'
-import classNames from 'classnames'
 import { DropdownMenu } from '../DropdownMenu'
 
 import logoSvg from '../../assets/logo.svg'
-import { DropdownMenu } from '../DropdownMenu'
 
 interface MEditorProps {
   shouldFloat: boolean
