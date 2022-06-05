@@ -2,10 +2,10 @@ import { useState } from 'react'
 import CustomEditor from '../CustomEditor'
 import Preview from '../Preview'
 
-import logoSvg from '../../assets/logo.svg'
 import { Tab, TabButton, TabButtonProps } from './TabButton'
 import { motion } from 'framer-motion'
 import classNames from 'classnames'
+import { DropdownMenu } from '../DropdownMenu'
 
 interface MEditorProps {
   shouldFloat: boolean
@@ -48,8 +48,8 @@ export function MEditor({
           })}
         >
           {showLogo && (
-            <div className="w-20 text-center">
-              <img src={logoSvg} className="w-4 inline" alt="" />
+            <div className="w-32 text-center z-50">
+              <DropdownMenu />
             </div>
           )}
 
