@@ -5,6 +5,8 @@ import Preview from '../Preview'
 import { Tab, TabButton, TabButtonProps } from './TabButton'
 import { motion } from 'framer-motion'
 import classNames from 'classnames'
+
+import logoSvg from '../../assets/logo.svg'
 import { DropdownMenu } from '../DropdownMenu'
 
 interface MEditorProps {
@@ -42,14 +44,10 @@ export function MEditor({
   return (
     <motion.div className="w-screen h-screen overflow-hidden relative flex">
       <div className="flex-1 flex flex-col h-full">
-        <nav
-          className={classNames('flex items-center gap-1 py-2 bg-[#13111b]', {
-            [`pl-8`]: !showLogo,
-          })}
-        >
+        <nav className="flex items-center gap-1 px-4 py-2 bg-[#13111b]">
           {showLogo && (
-            <div className="w-32 text-center z-50">
-              <DropdownMenu />
+            <div className="text-center px-4">
+              <img src={logoSvg} className="w-4 inline mr-2" alt="" />
             </div>
           )}
 
@@ -62,6 +60,10 @@ export function MEditor({
               selectedTab={selectedTab}
             />
           ))}
+
+          <div className="ml-auto z-50">
+            <DropdownMenu />
+          </div>
         </nav>
 
         <main
