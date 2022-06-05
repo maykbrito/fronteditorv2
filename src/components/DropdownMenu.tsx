@@ -1,9 +1,7 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment, useContext } from 'react'
 
-import logoSvg from '../assets/logo.svg'
-
-import { ArchiveBox } from 'phosphor-react'
+import { ArchiveBox, Gear } from 'phosphor-react'
 import { EditorContentContext } from '../contexts/EditorContentContext'
 
 import JSZip from 'jszip'
@@ -60,9 +58,8 @@ export function DropdownMenu() {
     <div className="top-16">
       <Menu as="div" className="relative inline-block text-left">
         <div>
-          <Menu.Button className="inline-flex items-center w-full justify-center rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-            <img src={logoSvg} className="w-4 inline mr-2" alt="" />
-            Menu
+          <Menu.Button className="inline-flex text-gray-400 hover:text-gray-200 items-center w-full justify-center rounded-md p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+            <Gear size={18} weight="bold" />
           </Menu.Button>
         </div>
         <Transition
@@ -74,7 +71,7 @@ export function DropdownMenu() {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="px-1 py-1">
               <Menu.Item>
                 {({ active }) => (
