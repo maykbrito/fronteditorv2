@@ -10,6 +10,7 @@ import logoSvg from '../../assets/logo.svg'
 
 interface MEditorProps {
   shouldFloat: boolean
+  isFullscreen: boolean
   showLogo?: boolean
   tabs?: TabButtonProps[] | null
 }
@@ -18,6 +19,7 @@ export function MEditor({
   tabs,
   showLogo = true,
   shouldFloat = false,
+  isFullscreen = false,
 }: MEditorProps) {
   const [selectedTab, setSelectedTab] = useState<Tab>('html')
 
@@ -42,7 +44,7 @@ export function MEditor({
 
   return (
     <motion.div className="w-screen h-screen overflow-hidden relative flex">
-      <div className="flex-1 flex flex-col h-full">
+      <div className={isFullscreen ? `hidden` : `flex-1 flex flex-col h-full`}>
         <nav className="flex items-center gap-1 px-4 py-2 bg-[#13111b]">
           {showLogo && (
             <div className="text-center px-4">
@@ -76,7 +78,7 @@ export function MEditor({
         </main>
       </div>
 
-      <Preview isFloating={shouldFloat} />
+      <Preview isFloating={shouldFloat} fullscreen={isFullscreen} />
     </motion.div>
   )
 }

@@ -24,9 +24,10 @@ let previewRenderTimer: NodeJS.Timeout
 
 interface PreviewProps {
   isFloating: boolean
+  fullscreen: boolean
 }
 
-export default function Preview({ isFloating = false }: PreviewProps) {
+export default function Preview({ isFloating = false, fullscreen = false }: PreviewProps) {
   const previewRef = useRef<HTMLDivElement>(null)
   const { app } = useContext(EditorContentContext)
 
@@ -101,6 +102,7 @@ export default function Preview({ isFloating = false }: PreviewProps) {
           [`absolute z-10 rounded-t-lg overflow-auto shadow`]: isFloating,
           [`relative h-full rounded-none`]: !isFloating,
           [`h-8 w-28 overflow-hidden`]: previewWindowState === 'closed',
+          [`flex-1`]: fullscreen,
         })}
         ref={previewRef}
         drag={isFloating}
@@ -136,6 +138,7 @@ export default function Preview({ isFloating = false }: PreviewProps) {
           onDragStart={handlePreviewDragStart}
           onLiveReloadToggle={setIsLiveReloadEnabled}
           onWindowStateChanged={setPreviewWindowState}
+          isFullscreen={fullscreen}
         />
 
         <div
