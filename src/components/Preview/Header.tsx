@@ -8,6 +8,7 @@ export type WindowState = 'minimized' | 'maximized' | 'closed'
 
 interface HeaderProps {
   isFloating: boolean
+  isFullscreen: boolean
   canBeDraggable: boolean
   windowTitle?: string
 
@@ -23,6 +24,7 @@ export function Header({
   onDragStart,
   onWindowStateChanged,
   onLiveReloadToggle,
+  isFullscreen = false,
 }: HeaderProps) {
   const [isLiveReloadEnabled, toggleLiveReload] = useToggle({
     initialValue: true,
@@ -37,6 +39,7 @@ export function Header({
         [`grid-cols-floatingPreviewHeader`]: isFloating,
         [`grid-cols-previewHeader`]: !isFloating,
         [`cursor-move`]: canBeDraggable,
+        [`hidden`]: isFullscreen,
       })}
       onPointerDown={canBeDraggable ? onDragStart : undefined}
     >
