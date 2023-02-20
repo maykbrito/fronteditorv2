@@ -33,7 +33,7 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
 
   const [isLiveReloadEnabled, setIsLiveReloadEnabled] = useState(true)
   const [previewTitle, setPreviewTitle] = useState('index.html')
-  const [pageIcon, setPageIcon] = useState('src/assets/favicon-black.svg')
+  const [pageIcon, setPageIcon] = useState('')
   const [src, setSrc] = useState('')
 
   const [previewWindowState, setPreviewWindowState] =
@@ -57,7 +57,7 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
 
     setSrc(codeToIframe)
     setPreviewTitle(pageTitle?.groups?.title ?? 'index.html')
-    setPageIcon(pageIcon?.groups?.icon ?? 'src/assets/favicon-black.svg')
+    setPageIcon(pageIcon?.groups?.icon ?? '')
   }, [app])
 
   useEffect(() => {

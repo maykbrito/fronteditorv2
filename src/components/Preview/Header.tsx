@@ -22,7 +22,7 @@ export function Header({
   isFloating,
   canBeDraggable,
   windowTitle = 'index.html',
-  windowIcon = 'src/assets/favicon-black.svg',
+  windowIcon = '',
   onDragStart,
   onWindowStateChanged,
   onLiveReloadToggle,
@@ -83,7 +83,11 @@ export function Header({
       className={classNames('text-sm text-zinc-400 justify-self-start flex items-center gap-2', {
         [`justify-self-center`]: isFloating,
       })}
-      ><img src={windowIcon} className='w-[16px] h-[16px] object-cover object-center' /> {windowTitle}
+      >
+        {windowIcon && (
+          <img src={windowIcon} className='w-[16px] h-[16px] object-cover object-center' />
+        )}
+         {windowTitle}
       </span>
 
       <label 
