@@ -6,7 +6,7 @@ import {
   useCallback,
   useRef,
 } from 'react'
-import { motion, PanInfo, useDragControls, useMotionValue } from 'framer-motion'
+import { motion, PanInfo, useDragControls, useMotionValue, useTransform } from 'framer-motion'
 import { DotsSixVertical } from 'phosphor-react'
 
 import {
@@ -74,6 +74,22 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
       editorHotkeys.removeEventListener('save', renderPreview)
     }
   }, [renderPreview])
+ 
+  /**
+   * Responsive
+   * Reset the preview to 100% when window 
+   * is bellow 640 (tailwind's sm value)
+   */
+  useEffect(() => {
+    const handleResize = () => 
+      window.innerWidth <= 640 && previewWidth.set(100)
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  })
 
   const dragControls = useDragControls()
 
@@ -86,11 +102,16 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
     [dragControls, previewWindowState],
   )
 
-  const previewWidth = useMotionValue(600)
+  const previewWidth = useMotionValue(100)
 
   const handleResize = useCallback(
     (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-      previewWidth.set(previewWidth.get() - info.delta.x)
+      /* 
+      * this calc is not working good
+      * I wanna something that follows the mouse's pointer
+      */
+      const newWidth = previewWidth.get() - info.delta.x / 8 
+      previewWidth.set(newWidth)
     },
     [previewWidth],
   )
@@ -112,7 +133,7 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
         dragControls={dragControls}
         whileDrag={{ cursor: 'grabbing', opacity: 0.6 }}
         animate={isFloating ? previewWindowState : undefined}
-        style={!isFloating ? { width: previewWidth } : {}}
+        style={!isFloating ? { width: useTransform(previewWidth, (value) => `${value}%`) } : {}}
         transition={{ duration: 0.2 }}
         variants={{
           maximized: {
@@ -158,7 +179,7 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
 
         {(!isFloating && !fullscreen) && (
           <motion.div
-            className="top-0 w-3 h-full z-20 absolute cursor-col-resize flex items-center active:w-full"
+            className="top-0 w-3 h-full z-20 absolute cursor-col-resize sm:flex items-center active:w-full hidden"
             drag="x"
             dragMomentum={false}
             dragElastic={false}

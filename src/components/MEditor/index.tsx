@@ -43,8 +43,8 @@ export function MEditor({
   ]
 
   return (
-    <motion.div className="w-screen h-screen overflow-hidden relative flex">
-      <div className={isFullscreen ? `hidden` : `flex-1 flex flex-col h-full`}>
+    <motion.div className="w-screen h-screen overflow-hidden relative sm:flex grid grid-rows-2">
+      <div className={isFullscreen ? `hidden` : `w-full flex flex-col h-full`}>
         <nav className="flex items-center gap-1 px-4 py-2 bg-[#13111b]">
           {showLogo && (
             <div className="text-center px-4">
