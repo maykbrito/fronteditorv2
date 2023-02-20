@@ -68,11 +68,7 @@ export function MEditor({
         </nav>
 
         <main
-          className={
-            !shouldFloat
-              ? 'flex flex-1 overflow-hidden relative mt-3 h-screen'
-              : ''
-          }
+          className='flex flex-1 overflow-hidden relative mt-3 h-screen'
         >
           <CustomEditor language={selectedTab} className="absolute inset-0" />
         </main>
