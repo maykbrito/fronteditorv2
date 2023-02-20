@@ -86,15 +86,18 @@ export function Header({
         {windowTitle}
       </span>
 
-      <div className="text-sm text-zinc-400 flex items-center gap-2">
-        <span>Live reload?</span>
+      <label 
+        title="Habilitar/desabilitar recarregamento automático"
+        htmlFor="live-reload" 
+        className="text-xs text-zinc-500 hover:opacity-[1] opacity-[0.4] flex gap-2 absolute right-3">
+        <span className="flex-1 flex justify-end cursor-pointer">Live reload?</span>
         <input
+          id="live-reload"
           type="checkbox"
-          title="Habilitar/desabilitar recarregamento automático"
           onChange={() => toggleLiveReload()}
           checked={isLiveReloadEnabled}
         />
-      </div>
+      </label>
     </header>
   )
 }
