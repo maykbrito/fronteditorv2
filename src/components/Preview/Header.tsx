@@ -89,7 +89,7 @@ export function Header({
       <label 
         title="Habilitar/desabilitar recarregamento automático"
         htmlFor="live-reload" 
-        className="hover:opacity-[1] opacity-[0.4] flex gap-2 absolute right-3 top-1.5">
+        className="hover:opacity-[1] opacity-[0.4] flex gap-2 absolute right-3 top-2">
         <span className="text-xs text-zinc-500 flex-1 flex justify-end cursor-pointer">Live reload?</span>
         <input
           id="live-reload"
