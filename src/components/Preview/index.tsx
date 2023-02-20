@@ -158,16 +158,16 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
 
         {!isFloating && (
           <motion.div
-            className="top-0 w-3 h-full z-20 absolute cursor-col-resize flex items-center active:w-full"
+            className={classNames('top-0 w-3 h-full z-20 absolute cursor-col-resize flex items-center active:w-full', { 
+              [`hidden`]: fullscreen, 
+            })} 
             drag="x"
             dragMomentum={false}
             dragElastic={false}
             dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
             onDrag={handleResize}
           >
-            <DotsSixVertical size={12}
-              className={classNames('', { [`hidden`]: fullscreen, })} 
-            />
+            <DotsSixVertical size={12} />
           </motion.div>
         )}
       </motion.div>
