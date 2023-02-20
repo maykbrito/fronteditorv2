@@ -165,7 +165,9 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
             dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
             onDrag={handleResize}
           >
-            <DotsSixVertical size={12} />
+            <DotsSixVertical size={12}
+              className={classNames('', { [`hidden`]: fullscreen, })} 
+            />
           </motion.div>
         )}
       </motion.div>
