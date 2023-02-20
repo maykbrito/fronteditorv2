@@ -47,9 +47,9 @@ export function MEditor({
       <div className={isFullscreen ? `hidden` : `w-full flex flex-col h-full`}>
         <nav className="flex items-center gap-1 px-4 py-2 bg-[#13111b]">
           {showLogo && (
-            <div className="text-center px-4">
-              <img src={logoSvg} className="w-4 inline mr-2" alt="" />
-            </div>
+            <a title="visit the open-source project" href="https://github.com/maykbrito/fronteditorv2" target="_blank" className="text-center px-4">
+              <img src={logoSvg} className="inline" alt="Fronteditor Logo" />
+            </a>
           )}
 
           {displayTabs.map((tab) => (
