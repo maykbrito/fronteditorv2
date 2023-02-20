@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { DropdownMenu } from '../DropdownMenu'
 
 import logoSvg from '../../assets/logo.svg'
+import classNames from 'classnames'
 
 interface MEditorProps {
   shouldFloat: boolean
@@ -43,7 +44,10 @@ export function MEditor({
   ]
 
   return (
-    <motion.div className="w-screen h-screen overflow-hidden relative sm:flex grid grid-rows-2">
+    <motion.div 
+      className={classNames("w-screen h-screen overflow-hidden relative sm:flex grid", {
+        [`grid-rows-2`]: !isFullscreen,
+      })}>
       <div className={isFullscreen ? `hidden` : `w-full flex flex-col h-full`}>
         <nav className="flex items-center gap-1 py-1 px-0 sm:px-4 sm:py-2 bg-[#11111b]">
           {showLogo && (
