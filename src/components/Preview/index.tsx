@@ -156,11 +156,9 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
           />
         </div>
 
-        {!isFloating && (
+        {(!isFloating && !fullscreen) && (
           <motion.div
-            className={classNames('top-0 w-3 h-full z-20 absolute cursor-col-resize flex items-center active:w-full', { 
-              [`hidden`]: fullscreen, 
-            })} 
+            className="top-0 w-3 h-full z-20 absolute cursor-col-resize flex items-center active:w-full"
             drag="x"
             dragMomentum={false}
             dragElastic={false}
