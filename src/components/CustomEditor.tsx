@@ -1,4 +1,4 @@
-import { useContext, memo } from 'react'
+import { useContext, memo, useEffect, useState } from 'react'
 
 import Editor from '@monaco-editor/react'
 import Storage from '../utils/Storage'
@@ -14,6 +14,26 @@ type CustomEditorProps = {
 const CustomEditor = ({ className, language }: CustomEditorProps) => {
   const { handleEditorDidMount, handleValueChange, isEditorReady } =
     useContext(EditorContentContext)
+
+
+  /**
+   * Responsive
+   * remove line numbers when window
+   * is bellow 640 (tailwind's sm value)
+   */
+  const [showLineNumber, setShowLineNumbers]= useState(true)
+ 
+  useEffect(() => {
+    const handleResize = () => 
+    window.innerWidth <= 640 ? setShowLineNumbers(false) : setShowLineNumbers(true)
+
+    window.addEventListener('resize', handleResize)
+    handleResize()
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  })
 
   return (
     <div className={className}>
@@ -33,6 +53,7 @@ const CustomEditor = ({ className, language }: CustomEditorProps) => {
           minimap: {
             enabled: false,
           },
+          lineNumbers: showLineNumber ? 'on' : 'off',
           rulers: [80, 120],
           renderLineHighlight: 'gutter',
           fontSize: 16,
