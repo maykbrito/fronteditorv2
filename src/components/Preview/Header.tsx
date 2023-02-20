@@ -11,6 +11,7 @@ interface HeaderProps {
   isFullscreen: boolean
   canBeDraggable: boolean
   windowTitle?: string
+  windowIcon?: string
 
   onDragStart: (event: PointerEvent) => void
   onWindowStateChanged: (state: WindowState) => void
@@ -21,6 +22,7 @@ export function Header({
   isFloating,
   canBeDraggable,
   windowTitle = 'index.html',
+  windowIcon = 'src/assets/favicon-black.svg',
   onDragStart,
   onWindowStateChanged,
   onLiveReloadToggle,
@@ -37,7 +39,6 @@ export function Header({
     <header
       className={classNames('bg-zinc-100 w-full h-8 px-4 grid items-center', {
         [`grid-cols-floatingPreviewHeader`]: isFloating,
-        [`grid-cols-previewHeader`]: !isFloating,
         [`cursor-move`]: canBeDraggable,
         [`hidden`]: isFullscreen,
       })}
@@ -79,11 +80,10 @@ export function Header({
       )}
 
       <span
-        className={classNames('text-sm text-zinc-400 justify-self-center', {
-          [`justify-self-start`]: !isFloating,
-        })}
-      >
-        {windowTitle}
+      className={classNames('text-sm text-zinc-400 justify-self-start flex items-center gap-2', {
+        [`justify-self-center`]: isFloating,
+      })}
+      ><img src={windowIcon} className='w-[16px] h-[16px] object-cover object-center' /> {windowTitle}
       </span>
 
       <label 

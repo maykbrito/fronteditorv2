@@ -33,6 +33,7 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
 
   const [isLiveReloadEnabled, setIsLiveReloadEnabled] = useState(true)
   const [previewTitle, setPreviewTitle] = useState('index.html')
+  const [pageIcon, setPageIcon] = useState('src/assets/favicon-black.svg')
   const [src, setSrc] = useState('')
 
   const [previewWindowState, setPreviewWindowState] =
@@ -49,12 +50,14 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
     }, '')
 
     const pageTitle = app.html.match(/<title>(?<title>.+)<\/title>/)
+    const pageIcon = app.html.match(/rel=['"](?:shortcut )?icon['"] href=['"](?<icon>[^?'"]+)[?'"]/)
 
     codeToIframe = base64EncodeUnicode(codeToIframe)
     codeToIframe = `data:text/html;charset=utf-8;base64,${codeToIframe}`
 
     setSrc(codeToIframe)
     setPreviewTitle(pageTitle?.groups?.title ?? 'index.html')
+    setPageIcon(pageIcon?.groups?.icon ?? 'src/assets/favicon-black.svg')
   }, [app])
 
   useEffect(() => {
@@ -156,6 +159,7 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
           isFloating={isFloating}
           canBeDraggable={isFloating && previewWindowState !== 'maximized'}
           windowTitle={previewTitle}
+          windowIcon={pageIcon}
           onDragStart={handlePreviewDragStart}
           onLiveReloadToggle={setIsLiveReloadEnabled}
           onWindowStateChanged={setPreviewWindowState}
