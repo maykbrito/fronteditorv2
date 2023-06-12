@@ -1,12 +1,15 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment, useContext } from 'react'
 
-import { ArchiveBox, Gear } from 'phosphor-react'
+import { ArchiveBox, Gear, DownloadSimple, UploadSimple } from 'phosphor-react'
 import { EditorContentContext } from '../contexts/EditorContentContext'
 
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import pretty from 'pretty'
+
+import Storage, { StorageState } from '../utils/Storage'
+import * as Fepack from '../utils/Fepack'
 
 const zip = new JSZip()
 
@@ -54,6 +57,35 @@ export function DropdownMenu() {
     saveAs(content, `frontend-editor-${new Date().toISOString()}.zip`)
   }
 
+  async function handleDownloadAsFepack() {
+    const fep: Fepack.dataType = {
+      path: window.location.pathname.replace('/', ''),
+      data: {
+        html: app.html,
+        css: app.css,
+        javascript: app.javascript,
+        markdown: app.markdown,
+      },
+    }
+
+    Fepack.save(fep)
+  }
+
+  async function handleLoadAsFepack() {
+    Fepack.load((data: Fepack.dataType, replace: boolean = false) => {
+      if (!data) return alert("It's not a valid file!")
+
+      // Saving and go
+      const stg: StorageState = data.data
+      const path = !replace
+        ? data.path
+        : window.location.pathname.replace('/', '')
+
+      Storage.add(stg, `fronteditor:${path}`)
+      window.location.pathname = path
+    })
+  }
+
   return (
     <div className="top-16">
       <Menu as="div" className="relative inline-block text-left">
@@ -83,6 +115,32 @@ export function DropdownMenu() {
                   >
                     <ArchiveBox size={20} className="mr-2" />
                     Download as ZIP
+                  </button>
+                )}
+              </Menu.Item>
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    className={`${
+                      active ? 'bg-green-400 text-gray-900' : 'text-gray-900'
+                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                    onClick={handleLoadAsFepack}
+                  >
+                    <UploadSimple size={20} className="mr-2" />
+                    Load a Fepack
+                  </button>
+                )}
+              </Menu.Item>
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    className={`${
+                      active ? 'bg-green-400 text-gray-900' : 'text-gray-900'
+                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                    onClick={handleDownloadAsFepack}
+                  >
+                    <DownloadSimple size={20} className="mr-2" />
+                    Save as Fepack
                   </button>
                 )}
               </Menu.Item>
