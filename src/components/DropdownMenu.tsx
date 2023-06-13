@@ -76,9 +76,9 @@ export function DropdownMenu() {
       if (!data) return alert("It's not a valid file!")
 
       // Saving and go
-      const stg: StorageState = data.data
-      const path = !replace
-        ? data.path
+      const stg: any = data.data
+      const path: string = !replace
+        ? data.path.toString()
         : window.location.pathname.replace('/', '')
 
       Storage.add(stg, `fronteditor:${path}`)

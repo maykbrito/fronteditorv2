@@ -19,7 +19,13 @@ export type dataType = {
   data: Object
 }
 
-const messages: object = {
+type tMessages = {
+  prompt: string
+  empty: string
+  replace: string
+}
+
+const messages: tMessages = {
   prompt: 'Type the password:',
   empty: 'Password is required!',
   replace:
@@ -49,14 +55,22 @@ export function load(callback: Function): void {
   f.accept = fileExtension
   f.onchange = async (e) => {
     e.preventDefault()
-    const file: any = e.target?.files[0]
+    const target = e.target as HTMLInputElement
+    const files = target.files
+    const file = files?.length ? files[0] : false
+
+    if (!file) {
+      f.remove()
+      // eslint-disable-next-line n/no-callback-literal
+      return callback(false)
+    }
     const content: string = await file.text()
     f.remove()
 
     // Getting the user's password
-    const pass = getUserPassword()
+    const pass: string = getUserPassword().toString()
     // eslint-disable-next-line n/no-callback-literal
-    if (!pass) return callback(false)
+    if (pass === '') return callback(false)
 
     // Trying to decrypt the file...
     let data: dataType
@@ -78,8 +92,8 @@ export function load(callback: Function): void {
 // Save encrypted file
 export function save(data: dataType): any {
   // Getting the user's password
-  const pass: string = getUserPassword()
-  if (!pass) return false
+  const pass: string = getUserPassword().toString()
+  if (pass === '') return false
 
   // Encrypting the file...
   const enc = encrypt(JSON.stringify(data), pass)
@@ -101,10 +115,10 @@ export function save(data: dataType): any {
 
 function getUserPassword(): string | boolean {
   // Getting the user's password
-  const pass = prompt(messages.prompt, '')
+  const pass: string | null = prompt(messages.prompt, '')
   if (!pass) {
     alert(messages.empty)
-    return false
+    return ''
   }
   return pass
 }
@@ -116,8 +130,8 @@ function getUserPassword(): string | boolean {
  * @return String      Base64 encoded string containing the encrypted data
  */
 export function encrypt(str: string, pass: string) {
-  const salt = CryptoJS.lib.WordArray.random(saltSize / 8)
-  const iv = CryptoJS.lib.WordArray.random(ivSize / 8)
+  const salt = CryptoJS.lib.WordArray.random(saltSize / 8).toString()
+  const iv = CryptoJS.lib.WordArray.random(ivSize / 8).toString()
 
   return hexToBase64(
     salt +
