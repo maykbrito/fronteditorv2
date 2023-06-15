@@ -6,7 +6,7 @@
   This is a simple tool to help you encrypt and decrypt your FrontEditor files.
   Feel free to use it and share it with your friends.
 */
-import CryptoJS from 'crypto-js'
+import * as CryptoJS from 'crypto-js'
 import { saveAs } from 'file-saver'
 
 const keySize = 256
@@ -23,13 +23,15 @@ type tMessages = {
   prompt: string
   empty: string
   replace: string
+  invalid: string
 }
 
 const messages: tMessages = {
   prompt: 'Type the password:',
   empty: 'Password is required!',
   replace:
-    'Replace the content of this page?\n**Press "cancel" to load the new location.',
+    'Replace the content of this page?\n\n** Press "CANCEL" to load the new location.',
+  invalid: "It's not a valid file!",
 }
 
 export function setMsgPrompt(value: string) {
@@ -44,15 +46,24 @@ export function setMsgReplace(value: string) {
   messages.replace = value
 }
 
+export function setMsgInvalid(value: string) {
+  messages.invalid = value
+}
+
 export function getMessages() {
   return messages
 }
 
-// Load a crypto file .fep
-export function load(callback: Function): void {
+// Load a file
+export function loadFile(
+  ext: string = fileExtension,
+  callback: Function,
+): void {
   const f = document.createElement('input')
   f.type = 'file'
-  f.accept = fileExtension
+  f.accept = ext
+  f.click()
+
   f.onchange = async (e) => {
     e.preventDefault()
     const target = e.target as HTMLInputElement
@@ -64,8 +75,20 @@ export function load(callback: Function): void {
       // eslint-disable-next-line n/no-callback-literal
       return callback(false)
     }
-    const content: string = await file.text()
+    // const content: string = await file.text()
     f.remove()
+
+    callback(file)
+  }
+}
+
+// Load a crypto file .fep
+export function load(callback: Function): void {
+  loadFile(fileExtension, async (file: any) => {
+    // eslint-disable-next-line n/no-callback-literal
+    if (!file) return callback(false)
+
+    const content: string = await file.text()
 
     // Getting the user's password
     const pass: string = getUserPassword().toString()
@@ -84,9 +107,11 @@ export function load(callback: Function): void {
     // Ask if the user wants to replace it's content
     const replace = confirm(messages.replace)
 
-    return callback(!data.path || !data.data ? false : data, replace)
-  }
-  f.click()
+    return callback(
+      undefined === data.path || undefined === data.data ? false : data,
+      replace,
+    )
+  })
 }
 
 // Save encrypted file
@@ -105,7 +130,7 @@ export function save(data: dataType): any {
     .replace(/\..*/g, '')
     .replace('T', '')
     .replace(/\:|\-/g, '')
-  const filename = `${path}-${date}${fileExtension}`
+  const filename = `${path === '' ? 'fepack' : path}-${date}${fileExtension}`
 
   saveAs(
     window.URL.createObjectURL(new Blob([enc], { type: 'text/plain' })),
@@ -130,8 +155,8 @@ function getUserPassword(): string | boolean {
  * @return String      Base64 encoded string containing the encrypted data
  */
 export function encrypt(str: string, pass: string) {
-  const salt = CryptoJS.lib.WordArray.random(saltSize / 8).toString()
-  const iv = CryptoJS.lib.WordArray.random(ivSize / 8).toString()
+  const salt: any = CryptoJS.lib.WordArray.random(saltSize / 8)
+  const iv: any = CryptoJS.lib.WordArray.random(ivSize / 8)
 
   return hexToBase64(
     salt +
@@ -151,11 +176,13 @@ export function encrypt(str: string, pass: string) {
 export function decrypt(str: string, pass: string) {
   const hexResult = base64ToHex(str)
 
-  return CryptoJS.AES.decrypt(
+  const x = CryptoJS.AES.decrypt(
     hexToBase64(hexResult.substring(96)),
     AESKey(pass, CryptoJS.enc.Hex.parse(hexResult.substring(0, 64))),
     AESCfg(CryptoJS.enc.Hex.parse(hexResult.substring(64, 96))),
-  ).toString(CryptoJS.enc.Utf8)
+  )
+  const y = x.toString(CryptoJS.enc.Utf8)
+  return y
 }
 
 // Helpers -------------------------------------------------------------
