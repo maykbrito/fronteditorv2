@@ -20,7 +20,7 @@ import * as Fepack from '../utils/Fepack'
 const zip = new JSZip()
 
 export function DropdownMenu() {
-  const { app } = useContext(EditorContentContext)
+  const { app, handleValueChange } = useContext(EditorContentContext)
 
   function addScriptsToParsedHtmlHead(parsed: Document) {
     const head = parsed.querySelector('head')!
@@ -63,40 +63,38 @@ export function DropdownMenu() {
     saveAs(content, `frontend-editor-${new Date().toISOString()}.zip`)
   }
 
+  function updateAppData(data: StorageState) {
+    handleValueChange('html', data.html || '')
+    handleValueChange('css', data.css || '')
+    handleValueChange('javascript', data.javascript || '')
+    handleValueChange('markdown', data.markdown || '')
+  }
+
   async function handleUploadAsZip() {
     Fepack.loadFile('.zip', (f: any) => {
       const a: any = {}
       const aKeys = ['html', 'css', 'javascript', 'markdown']
 
-      JSZip.loadAsync(f).then(
-        (zip: any) => {
-          const names: any[] = []
-          zip.forEach((relativePath: any, zipEntry: any) =>
-            names.push(zipEntry),
-          )
+      JSZip.loadAsync(f).then((zip: any) => {
+        const names: any[] = []
+        zip.forEach((relativePath: any, zipEntry: any) => names.push(zipEntry))
 
-          Promise.all(
-            names.map((c) =>
-              zip.files[c.name].async('string').then((data: any) => {
-                let n: string = c.name.split('.').pop()
-                if (n === 'js') n = 'javascript'
-                if (n === 'md') n = 'markdown'
-                if (aKeys.includes(n)) a[n] = data
-                return a
-              }),
-            ),
-          ).then((f) => {
-            if (Object.keys(f[0]).length === 0)
-              return alert(Fepack.getMessages().invalid)
-            const path = ''
-            Storage.add(f[0], `fronteditor:${path}`)
-            window.location.pathname = path
-          })
-        },
-        (error: any) => {
-          console.log('Error', error)
-        },
-      )
+        Promise.all(
+          names.map((c) =>
+            zip.files[c.name].async('string').then((data: any) => {
+              let n: string = c.name.split('.').pop()
+              if (n === 'js') n = 'javascript'
+              if (n === 'md') n = 'markdown'
+              if (aKeys.includes(n)) a[n] = data
+              return a
+            }),
+          ),
+        ).then((f) => {
+          if (Object.keys(f[0]).length === 0)
+            return alert(Fepack.getMessages().invalid)
+          updateAppData(f[0])
+        })
+      })
     })
   }
 
@@ -120,12 +118,10 @@ export function DropdownMenu() {
 
       // Saving and go
       const stg: any = data.data
-      const path: string = !replace
-        ? data.path.toString()
-        : window.location.pathname.replace('/', '')
 
-      Storage.add(stg, `fronteditor:${path}`)
-      window.location.pathname = path
+      if (!replace) window.history.replaceState(null, '', data.path.toString())
+
+      updateAppData(stg)
     })
   }
 
