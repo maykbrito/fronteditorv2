@@ -10,14 +10,14 @@ export type StorageState = typeof initialState
 export type StorageKeys = keyof typeof initialState
 
 // each url will be a new content
-const app = `fronteditor:${window.location.pathname.replace('/', '')}`
+const app = () => `fronteditor:${window.location.pathname.replace('/', '')}`
 
-const add = (value: typeof initialState) => {
-  localStorage.setItem(app, JSON.stringify(value))
+const add = (value: typeof initialState, key: string = app()) => {
+  localStorage.setItem(key, JSON.stringify(value))
 }
 
 const get = (): typeof initialState => {
-  const value = localStorage.getItem(app) || JSON.stringify(initialState)
+  const value = localStorage.getItem(app()) || JSON.stringify(initialState)
   return JSON.parse(value)
 }
 
@@ -26,7 +26,7 @@ const getItem = (item: StorageKeys) => {
   return values[item] || ''
 }
 
-const remove = () => localStorage.removeItem(app)
+const remove = () => localStorage.removeItem(app())
 
 export default {
   add,
