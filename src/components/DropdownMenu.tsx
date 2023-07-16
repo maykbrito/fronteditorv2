@@ -1,7 +1,7 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment, useContext } from 'react'
 
-import { ArchiveBox, Gear } from 'phosphor-react'
+import { ArchiveBox, Gear, FileArrowDown, FileArrowUp } from 'phosphor-react'
 import { EditorContentContext } from '../contexts/EditorContentContext'
 
 import JSZip from 'jszip'
@@ -54,6 +54,50 @@ export function DropdownMenu() {
     saveAs(content, `frontend-editor-${new Date().toISOString()}.zip`)
   }
 
+  async function handleExportAsJSON() {
+    const projects = Object
+      .keys(localStorage)
+      .filter( key => key.includes('fronteditor:'))
+      .reduce((acc: any, key) => {
+        acc[key] = localStorage.getItem(key)
+        return acc
+      }, {})
+
+    const projectsAsJSON = JSON.stringify({ ...projects });
+
+    const blob = new Blob([projectsAsJSON], { type: "application/json" });
+    saveAs(blob, `fronteditor-${new Date().toISOString()}.json`)
+  }
+  async function handleImportFromJSON() {
+    const fileUploader = document.createElement('input')
+    fileUploader.setAttribute('type', 'file')
+    fileUploader.setAttribute('accept', 'application/json')
+    fileUploader.addEventListener('change', handleChange)
+    fileUploader.click()
+
+    function handleChange(e: any) {
+      const { target } = e
+      const fileReader = new FileReader();
+      
+      if(!target.files) return
+      fileReader.readAsText(target.files[0], "UTF-8");
+
+      fileReader.onload = (readerEvent: ProgressEvent<FileReader>) => {
+        const result  = readerEvent?.target?.result
+        if(!result || typeof result != 'string') return
+
+        const data = JSON.parse(result)
+        Object.keys(data).forEach(key => {
+          const exists = localStorage.getItem(key)
+          if(exists) return
+
+          console.log('creating project: ', key)
+          localStorage.setItem(key, data[key])
+        })
+      };
+    };
+  }
+
   return (
     <div className="top-16">
       <Menu as="div" className="relative inline-block text-left">
@@ -83,6 +127,34 @@ export function DropdownMenu() {
                   >
                     <ArchiveBox size={20} className="mr-2" />
                     Download as ZIP
+                  </button>
+                )}
+              </Menu.Item>
+
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    className={`${
+                      active ? 'bg-green-400 text-gray-900' : 'text-gray-900'
+                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                    onClick={handleExportAsJSON}
+                  >
+                    <FileArrowDown size={20} className="mr-2" />
+                    Export Projects (JSON)
+                  </button>
+                )}
+              </Menu.Item>
+
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    className={`${
+                      active ? 'bg-green-400 text-gray-900' : 'text-gray-900'
+                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                    onClick={handleImportFromJSON}
+                  >
+                    <FileArrowUp size={20} className="mr-2" />
+                    Import Projects (JSON)
                   </button>
                 )}
               </Menu.Item>
