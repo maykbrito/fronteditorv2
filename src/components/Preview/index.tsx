@@ -77,14 +77,14 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
       editorHotkeys.removeEventListener('save', renderPreview)
     }
   }, [renderPreview])
- 
+
   /**
    * Responsive
    * Reset the preview to 100% when window 
    * is bellow 640 (tailwind's sm value)
    */
   useEffect(() => {
-    const handleResize = () => 
+    const handleResize = () =>
       window.innerWidth <= 640 && previewWidth.set(100)
 
     window.addEventListener('resize', handleResize)
@@ -113,7 +113,7 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
       * this calc is not working good
       * I wanna something that follows the mouse's pointer
       */
-      const newWidth = previewWidth.get() - info.delta.x / 8 
+      const newWidth = previewWidth.get() - info.delta.x / 8
       previewWidth.set(newWidth)
     },
     [previewWidth],
@@ -122,7 +122,7 @@ export default function Preview({ isFloating = false, fullscreen = false }: Prev
   return (
     <>
       <motion.div
-        className={classNames('bg-white flex flex-col', {
+        className={classNames('bg-white flex flex-col order-1 sm:order-2', {
           [`absolute z-10 rounded-t-lg overflow-auto shadow`]: isFloating,
           [`relative h-full rounded-none`]: !isFloating,
           [`h-8 w-28 overflow-hidden`]: previewWindowState === 'closed',

@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { X, Minus, CornersOut } from 'phosphor-react'
+import { X, Minus, CornersOut, ArrowsCounterClockwise } from 'phosphor-react'
 import { PointerEvent } from 'react'
 import { useToggle } from '../../hooks/useToggle'
 import { HeaderButton } from './HeaderButton'
@@ -34,6 +34,8 @@ export function Header({
       onLiveReloadToggle(value)
     },
   })
+
+  const activationTitleLiveReload = isLiveReloadEnabled ? 'Desabilitar' : 'Habilitar'
 
   return (
     <header
@@ -80,28 +82,39 @@ export function Header({
       )}
 
       <span
-      className={classNames('text-sm text-zinc-400 justify-self-start flex items-center gap-2', {
-        [`justify-self-center`]: isFloating,
-      })}
+        className={classNames('text-sm text-zinc-400 justify-self-start flex items-center gap-2', {
+          [`justify-self-center`]: isFloating,
+        })}
       >
         {windowIcon && (
           <img src={windowIcon} className='w-[16px] h-[16px] object-cover object-center' />
         )}
-         {windowTitle}
+        {windowTitle}
       </span>
 
-      <label 
-        title="Habilitar/desabilitar recarregamento automático"
-        htmlFor="live-reload" 
-        className="hover:opacity-[1] opacity-[0.4] flex gap-2 absolute right-3 top-2">
-        <span className="text-xs text-zinc-500 flex-1 flex justify-end cursor-pointer">Live reload?</span>
+      <label
+        title={`${activationTitleLiveReload} recarregamento automático`}
+        htmlFor="live-reload"
+        className="hover:opacity-[1] opacity-[0.4] flex gap-2 absolute right-3 top-2 items-center select-none"
+      >
+        <span className="text-xs text-zinc-500 flex-1 flex justify-end cursor-pointer">{`${activationTitleLiveReload} live reload?`}</span>
         <input
+          className="hidden"
           id="live-reload"
           type="checkbox"
           onChange={() => toggleLiveReload()}
           checked={isLiveReloadEnabled}
         />
+        <span className="grid place-items-center">
+          <ArrowsCounterClockwise size={18} />
+          <span className={classNames(
+            "absolute -right-0 top-0 size-1.5 rounded-full bg-red-600", {
+            hidden: !isLiveReloadEnabled
+          })}>
+            <span className="absolute size-full rounded-full bg-red-600 animate-ping"></span>
+          </span>
+        </span>
       </label>
-    </header>
+    </header >
   )
 }
