@@ -20,7 +20,11 @@
 ---
 ## Preview Demo
 
-https://raw.githubusercontent.com/maykbrito/fronteditorv2/refs/heads/main/.github/preview.mp4
+
+
+https://github.com/user-attachments/assets/b3e3d6bb-7429-4e55-9fb9-3b002a11e0a3
+
+
 
 ---
 
