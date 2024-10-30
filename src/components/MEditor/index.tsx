@@ -2,7 +2,7 @@ import { useState } from 'react'
 import CustomEditor from '../CustomEditor'
 import Preview from '../Preview'
 
-import { type Tab, TabButton, TabButtonProps } from './TabButton'
+import { type Tab, TabButton, type TabButtonProps } from './TabButton'
 import { Menu } from '@/components/DropdownMenu'
 
 import logoSvg from '../../assets/logo.svg'
@@ -20,7 +20,7 @@ interface MEditorProps {
 export function MEditor({ tabs }: MEditorProps) {
   const size = useWindowSize()
   const params = new URLSearchParams(window.location.search)
-  const showLogo = params.get('logo') === 'false' ? false : true
+  const showLogo = params.get('logo') !== 'false'
   const isFullscreen = Boolean(params.get('fullscreen') === 'true')
   const hideTabs = params.get('hideTabs')
   const editorOnly = params.get('editorOnly') === 'true' || false
@@ -68,6 +68,7 @@ export function MEditor({ tabs }: MEditorProps) {
             title="visit the open-source project"
             href="https://github.com/maykbrito/fronteditorv2"
             target="_blank"
+            rel="noreferrer noopenner"
             className="text-center px-4"
           >
             <img src={logoSvg} className="inline" alt="Fronteditor Logo" />
@@ -89,7 +90,7 @@ export function MEditor({ tabs }: MEditorProps) {
         </div>
       </nav>
 
-      <main className="flex flex-1 overflow-hidden relative mt-1 sm:mt-3 h-screen">
+      <main className="flex flex-1 overflow-hidden relative h-screen">
         <CustomEditor language={selectedTab} className="absolute inset-0" />
       </main>
     </div>

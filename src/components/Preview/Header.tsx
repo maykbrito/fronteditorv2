@@ -1,5 +1,7 @@
+import { ReloadIcon } from '@radix-ui/react-icons'
 import { useToggle } from '../../hooks/useToggle'
 import { Switch } from '../ui/switch'
+import { RefreshCcw, RefreshCwOffIcon } from 'lucide-react'
 
 interface HeaderProps {
   windowTitle?: string
@@ -25,6 +27,7 @@ export function Header({
       <span className="text-sm text-zinc-400 justify-self-start flex items-center gap-2">
         {windowIcon && (
           <img
+            alt="window icon"
             src={windowIcon}
             className="w-[16px] h-[16px] object-cover object-center"
           />
@@ -40,12 +43,17 @@ export function Header({
         <span className="text-xs text-zinc-500 flex-1 flex justify-end cursor-pointer">
           Live reload?
         </span>
-        <Switch
+        {isLiveReloadEnabled ? (
+          <RefreshCcw className="size-3" />
+        ) : (
+          <RefreshCwOffIcon className="size-3" />
+        )}
+        <input type="checkbox"
           id="live-reload"
           aria-label="Live reload"
-          onCheckedChange={toggleLiveReload}
+          onChange={toggleLiveReload}
           checked={isLiveReloadEnabled}
-          className="w-8 h-3 bg-zinc-500 rounded-full relative"
+          className="absolute inset-0 opacity-0 cursor-pointer"
         />
       </label>
     </header>

@@ -12,6 +12,11 @@ type CustomEditorProps = {
 }
 
 const CustomEditor = ({ className, language }: CustomEditorProps) => {
+
+  const params =  new URLSearchParams(window.location.search)
+  const lineNumbers = params.get('lineNumbers') as 'on' | 'off'
+  const theme = params.get('theme') || 'custom-theme'
+
   const { handleEditorDidMount, handleValueChange, isEditorReady } =
     useContext(EditorContentContext)
 
@@ -20,13 +25,13 @@ const CustomEditor = ({ className, language }: CustomEditorProps) => {
    * remove line numbers when window
    * is bellow 640 (tailwind's sm value)
    */
-  const [showLineNumber, setShowLineNumbers] = useState(true)
+  const [showLineNumber, setShowLineNumbers] = useState<'on' | 'off'>('on')
 
   useEffect(() => {
     const handleResize = () =>
       window.innerWidth <= 640
-        ? setShowLineNumbers(false)
-        : setShowLineNumbers(true)
+        ? setShowLineNumbers('off')
+        : setShowLineNumbers('on')
 
     window.addEventListener('resize', handleResize)
     handleResize()
@@ -54,8 +59,7 @@ const CustomEditor = ({ className, language }: CustomEditorProps) => {
           minimap: {
             enabled: false,
           },
-          lineNumbers: showLineNumber ? 'on' : 'off',
-          rulers: [80, 120],
+          lineNumbers: lineNumbers || showLineNumber,
           renderLineHighlight: 'gutter',
           fontSize: 16,
           lineHeight: 26,
@@ -67,6 +71,12 @@ const CustomEditor = ({ className, language }: CustomEditorProps) => {
           },
           wordWrap: 'on',
           tabSize: 2,
+          mouseWheelZoom: true,
+          theme,
+          padding: {
+            top: 10,
+            bottom: 10,
+          }
         }}
       />
     </div>

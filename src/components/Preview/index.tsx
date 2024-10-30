@@ -5,10 +5,11 @@ import {
   editorHotkeys,
 } from '../../contexts/EditorContentContext'
 import { formatCodeToIframe } from '../../utils/FormatCodeToIframe'
-import { StorageKeys } from '../../utils/Storage'
+import type { StorageKeys } from '../../utils/Storage'
 
 import { base64EncodeUnicode } from '../../utils/base-64-encode-unicode'
 import { Header } from './Header'
+import { PreviewIframe } from './preview-iframe'
 
 let previewRenderTimer: NodeJS.Timeout
 
@@ -66,13 +67,7 @@ export default function Preview() {
 
   if (fullscreen) {
     return (
-      <iframe
-        src={src}
-        id="result"
-        frameBorder={0}
-        allow="camera; microphone; fullscreen; accelerometer; autoplay; geolocation; payment; midi; magnetometer; gyroscope; document-domain; encrypted-media; picture-in-picture; screen-wake-lock"
-        className="w-full h-full flex-1 relative z-10"
-      />
+      <PreviewIframe src={src} />
     )
   }
 
@@ -85,13 +80,7 @@ export default function Preview() {
       />
 
       <div className="h-full flex-1">
-        <iframe
-          src={src}
-          id="result"
-          frameBorder={0}
-          allow="camera; microphone; fullscreen; accelerometer; autoplay; geolocation; payment; midi; magnetometer; gyroscope; document-domain; encrypted-media; picture-in-picture; screen-wake-lock"
-          className="w-full h-full"
-        />
+        <PreviewIframe src={src} />
       </div>
     </div>
   )
