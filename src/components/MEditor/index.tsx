@@ -23,6 +23,7 @@ export function MEditor({
   const hideTabs = params.get('hideTabs')
   const editorOnly = params.get('editorOnly') === 'true' || false
   const vertical = params.get('vertical') === 'true' || false
+  const reverse = params.get('reverse') === 'true' || false
 
   const displayTabs = tabs || [
     {
@@ -97,11 +98,11 @@ export function MEditor({
         direction={vertical || size.width && size.width < 640 ? `vertical` : `horizontal`} 
       >
         <ResizablePanel>
-          {renderEditor()}
+          {!reverse ? renderEditor() : <Preview />}
         </ResizablePanel>
         <ResizableHandle />
         <ResizablePanel>
-          <Preview />
+          {!reverse ? <Preview /> : renderEditor()}
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
