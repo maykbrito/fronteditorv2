@@ -9,7 +9,7 @@ export function useToggle({ initialValue = false, onChange }: UseToggleParams) {
   const [isEnabled, setIsEnabled] = useState(initialValue)
 
   const toggle = useCallback(() => {
-    setIsEnabled((state) => {
+    setIsEnabled(state => {
       if (onChange) {
         onChange(!state)
       }

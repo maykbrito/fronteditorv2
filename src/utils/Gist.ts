@@ -7,8 +7,8 @@ export const getGist = async () => {
   const gist = await fetch(
     `https://api.github.com/gists/${pathname.replace(
       /(\/gists\/|\/view)/gi,
-      '',
-    )}`,
+      ''
+    )}`
   )
 
   const json = await gist.json()

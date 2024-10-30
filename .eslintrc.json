@@ -1,6 +1,0 @@
-{
-  "extends": "@rocketseat/eslint-config/react",
-  "globals": {
-    "NodeJS": true
-  }
-}

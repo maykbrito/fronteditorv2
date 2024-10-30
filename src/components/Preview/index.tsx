@@ -1,9 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-} from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
 
 import {
   EditorContentContext,
@@ -39,7 +34,9 @@ export default function Preview() {
     }, '')
 
     const pageTitle = app.html.match(/<title>(?<title>.+)<\/title>/)
-    const pageIcon = app.html.match(/rel=['"](?:shortcut )?icon['"] href=['"](?<icon>[^?'"]+)[?'"]/)
+    const pageIcon = app.html.match(
+      /rel=['"](?:shortcut )?icon['"] href=['"](?<icon>[^?'"]+)[?'"]/
+    )
 
     codeToIframe = base64EncodeUnicode(codeToIframe)
     codeToIframe = `data:text/html;charset=utf-8;base64,${codeToIframe}`
@@ -67,7 +64,6 @@ export default function Preview() {
     }
   }, [renderPreview])
 
-
   if (fullscreen) {
     return (
       <iframe
@@ -82,14 +78,13 @@ export default function Preview() {
 
   return (
     <div className="w-full h-full flex flex-col">
-
       <Header
         windowTitle={previewTitle}
         windowIcon={pageIcon}
         onLiveReloadToggle={setIsLiveReloadEnabled}
       />
 
-      <div className='h-full flex-1'>
+      <div className="h-full flex-1">
         <iframe
           src={src}
           id="result"
