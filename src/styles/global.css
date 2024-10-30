@@ -3,6 +3,13 @@
 @tailwind components;
 
 body {
-  @apply bg-[#191622];
+  /* @apply bg-[#191622]; */
+}
+
+@layer base {
+  :root {
+
+    --radius: 0.5rem
+  }
 }
 
