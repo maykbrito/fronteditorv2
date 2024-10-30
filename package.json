@@ -9,6 +9,7 @@
     "lint": "eslint src --ext tsx"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.13.1",
     "@headlessui/react": "^2.2.0",
     "@monaco-editor/react": "^4.6.0",
     "@radix-ui/react-dropdown-menu": "^2.1.2",
