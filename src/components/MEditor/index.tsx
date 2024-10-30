@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useClerk } from '@clerk/clerk-react'
 import CustomEditor from '../CustomEditor'
 import Preview from '../Preview'
 
@@ -18,6 +19,8 @@ interface MEditorProps {
 }
 
 export function MEditor({ tabs }: MEditorProps) {
+  const clerk = useClerk()
+
   const size = useWindowSize()
   const params = new URLSearchParams(window.location.search)
   const showLogo = params.get('logo') === 'false' ? false : true
@@ -90,7 +93,7 @@ export function MEditor({ tabs }: MEditorProps) {
       </nav>
 
       <main className="flex flex-1 overflow-hidden relative mt-1 sm:mt-3 h-screen">
-        <CustomEditor language={selectedTab} className="absolute inset-0" />
+        {clerk.loaded && <CustomEditor language={selectedTab} className="absolute inset-0" /> }
       </main>
     </div>
   )
