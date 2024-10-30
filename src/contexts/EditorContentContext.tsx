@@ -32,7 +32,7 @@ interface EditorContentContextData {
 }
 
 export const EditorContentContext = createContext(
-  {} as EditorContentContextData,
+  {} as EditorContentContextData
 )
 
 export const editorHotkeys = new EventTarget()
@@ -54,10 +54,10 @@ export function EditorContentContextProvider({
 
     const currentApp = Storage.get()
     const keys = Object.keys(currentApp) as StorageKeys[]
-    const hasDataInStorage = keys.some((key) => currentApp[key] !== '')
+    const hasDataInStorage = keys.some(key => currentApp[key] !== '')
 
     if (isGistViewOnly || !hasDataInStorage) {
-      getGist().then((gist) => {
+      getGist().then(gist => {
         setApp(gist)
         Storage.add(gist)
       })
@@ -66,13 +66,13 @@ export function EditorContentContextProvider({
 
   const handleValueChange = useCallback(
     async (language: string, value: string) => {
-      setApp((oldState) => {
+      setApp(oldState => {
         const updatedValues = { ...oldState, [language]: value }
         Storage.add(updatedValues)
         return updatedValues
       })
     },
-    [],
+    []
   )
 
   const loadTmGrammars = useCallback(async () => {
@@ -94,7 +94,7 @@ export function EditorContentContextProvider({
       monacoRef.current!,
       registry,
       grammars,
-      editorRef.current,
+      editorRef.current
     )
   }, [])
 
@@ -109,7 +109,7 @@ export function EditorContentContextProvider({
 
       monacoRef.current.editor.defineTheme(
         'custom-theme',
-        monacoOmniTheme as editor.IStandaloneThemeData,
+        monacoOmniTheme as editor.IStandaloneThemeData
       )
 
       loadTmGrammars().then(() => {
@@ -118,7 +118,7 @@ export function EditorContentContextProvider({
         setIsEditorReady(true)
       })
     },
-    [loadTmGrammars],
+    [loadTmGrammars]
   )
 
   return (

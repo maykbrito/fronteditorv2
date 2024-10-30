@@ -23,7 +23,7 @@ export function TabButton({
         'bg-transparent border-0 text-zinc-100 text-xs outline-none py-1 px-2.5 cursor-pointer rounded hover:bg-white/10',
         {
           [`bg-white/20`]: tabName === selectedTab,
-        },
+        }
       )}
     >
       {displayName}

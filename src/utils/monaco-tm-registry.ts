@@ -6,7 +6,7 @@ import htmlGrammar from '../assets/monaco-grammars/html.tmLanguage.json?url'
 import mdGrammar from '../assets/monaco-grammars/markdown.tmLanguage.json?url'
 
 export const registry = new Registry({
-  getGrammarDefinition: async (scopeName) => {
+  getGrammarDefinition: async scopeName => {
     if (scopeName === 'source.js') {
       return {
         format: 'json',

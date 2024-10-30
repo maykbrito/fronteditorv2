@@ -3,19 +3,21 @@ import CustomEditor from '../CustomEditor'
 import Preview from '../Preview'
 
 import { type Tab, TabButton, TabButtonProps } from './TabButton'
-import { DropdownMenu } from '../DropdownMenu'
+import { Menu } from '@/components/DropdownMenu'
 
 import logoSvg from '../../assets/logo.svg'
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../ui/resizable'
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from '../ui/resizable'
 import { useWindowSize } from '@uidotdev/usehooks'
 
 interface MEditorProps {
   tabs?: TabButtonProps[] | null
 }
 
-export function MEditor({
-  tabs,
-}: MEditorProps) {
+export function MEditor({ tabs }: MEditorProps) {
   const size = useWindowSize()
   const params = new URLSearchParams(window.location.search)
   const showLogo = params.get('logo') === 'false' ? false : true
@@ -25,45 +27,54 @@ export function MEditor({
   const vertical = params.get('vertical') === 'true' || false
   const reverse = params.get('reverse') === 'true' || false
 
-  const displayTabs = tabs || [
-    {
-      tabName: 'html',
-      displayName: 'HTML',
-    },
-    {
-      tabName: 'css',
-      displayName: 'CSS',
-    },
-    {
-      tabName: 'javascript',
-      displayName: 'JS',
-    },
-    {
-      tabName: 'markdown',
-      displayName: 'MD',
-    },
-  ].filter((tab) => !hideTabs?.includes(tab.tabName))
+  const displayTabs =
+    tabs ||
+    [
+      {
+        tabName: 'html',
+        displayName: 'HTML',
+      },
+      {
+        tabName: 'css',
+        displayName: 'CSS',
+      },
+      {
+        tabName: 'javascript',
+        displayName: 'JS',
+      },
+      {
+        tabName: 'markdown',
+        displayName: 'MD',
+      },
+    ].filter(tab => !hideTabs?.includes(tab.tabName))
 
-  const [selectedTab, setSelectedTab] = useState<Tab>(displayTabs[0].tabName as Tab)
+  const [selectedTab, setSelectedTab] = useState<Tab>(
+    displayTabs[0].tabName as Tab
+  )
 
   if (isFullscreen) {
     return (
-      <div className='w-full h-screen overflow-hidden relative sm:flex grid'>
+      <div className="w-full h-screen overflow-hidden relative sm:flex grid">
         <Preview />
       </div>
     )
   }
 
   const renderEditor = () => (
-    <div className='w-full flex flex-col h-full bg-[#191622]'>
+    <div className="w-full flex flex-col h-full bg-[#191622]">
       <nav className="flex items-center gap-1 py-1 px-0 sm:px-4 sm:py-2 bg-[#11111b]">
         {showLogo && (
-          <a title="visit the open-source project" href="https://github.com/maykbrito/fronteditorv2" target="_blank" className="text-center px-4">
+          <a
+            title="visit the open-source project"
+            href="https://github.com/maykbrito/fronteditorv2"
+            target="_blank"
+            className="text-center px-4"
+          >
             <img src={logoSvg} className="inline" alt="Fronteditor Logo" />
           </a>
         )}
 
-        {displayTabs.map((tab) => (
+        {displayTabs.map(tab => (
           <TabButton
             key={tab.tabName}
             displayName={tab.displayName}
@@ -74,28 +85,32 @@ export function MEditor({
         ))}
 
         <div className="ml-auto z-50">
-          <DropdownMenu />
+          <Menu />
         </div>
       </nav>
 
-      <main
-        className='flex flex-1 overflow-hidden relative mt-1 sm:mt-3 h-screen'
-      >
+      <main className="flex flex-1 overflow-hidden relative mt-1 sm:mt-3 h-screen">
         <CustomEditor language={selectedTab} className="absolute inset-0" />
       </main>
     </div>
   )
 
   if (editorOnly) {
-    return <div className='w-screen h-screen overflow-hidden relative sm:flex grid'>
-    {renderEditor()}
-    </div>
+    return (
+      <div className="w-screen h-screen overflow-hidden relative sm:flex grid">
+        {renderEditor()}
+      </div>
+    )
   }
 
   return (
-    <div className='w-screen h-screen overflow-hidden relative sm:flex grid'>
+    <div className="w-screen h-screen overflow-hidden relative sm:flex grid">
       <ResizablePanelGroup
-        direction={vertical || size.width && size.width < 640 ? `vertical` : `horizontal`} 
+        direction={
+          vertical || (size.width && size.width < 640)
+            ? `vertical`
+            : `horizontal`
+        }
       >
         <ResizablePanel>
           {!reverse ? renderEditor() : <Preview />}

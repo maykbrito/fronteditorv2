@@ -1,6 +1,6 @@
 type FormatCodeToIframeResponse = {
-  [key: string]: string;
-};
+  [key: string]: string
+}
 
 export const formatCodeToIframe = (
   value: string
@@ -8,4 +8,4 @@ export const formatCodeToIframe = (
   html: value,
   css: `<style>${value}</style>`,
   javascript: `<script>${value}</script>`,
-});
+})

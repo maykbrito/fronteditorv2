@@ -15,20 +15,19 @@ export function Header({
 }: HeaderProps) {
   const [isLiveReloadEnabled, toggleLiveReload] = useToggle({
     initialValue: true,
-    onChange: (value) => {
+    onChange: value => {
       onLiveReloadToggle(value)
     },
   })
 
   return (
-    <header
-      className='bg-zinc-100 w-full h-8 px-4 grid items-center relative'
-    >
-      <span
-        className='text-sm text-zinc-400 justify-self-start flex items-center gap-2'
-      >
+    <header className="bg-zinc-100 w-full h-8 px-4 grid items-center relative">
+      <span className="text-sm text-zinc-400 justify-self-start flex items-center gap-2">
         {windowIcon && (
-          <img src={windowIcon} className='w-[16px] h-[16px] object-cover object-center' />
+          <img
+            src={windowIcon}
+            className="w-[16px] h-[16px] object-cover object-center"
+          />
         )}
         {windowTitle}
       </span>
@@ -36,8 +35,11 @@ export function Header({
       <label
         title="Habilitar/desabilitar recarregamento automático"
         htmlFor="live-reload"
-        className="hover:opacity-[1] opacity-[0.4] flex gap-2 absolute right-3 top-2 items-center">
-        <span className="text-xs text-zinc-500 flex-1 flex justify-end cursor-pointer">Live reload?</span>
+        className="hover:opacity-[1] opacity-[0.4] flex gap-2 absolute right-3 top-2 items-center"
+      >
+        <span className="text-xs text-zinc-500 flex-1 flex justify-end cursor-pointer">
+          Live reload?
+        </span>
         <Switch
           id="live-reload"
           aria-label="Live reload"
