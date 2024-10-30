@@ -21,7 +21,7 @@ export function MEditor({ tabs }: MEditorProps) {
   const size = useWindowSize()
   const params = new URLSearchParams(window.location.search)
   const showLogo = params.get('logo') !== 'false'
-  const isFullscreen = Boolean(params.get('fullscreen') === 'true')
+  const previewOnly = params.get('previewOnly')
   const hideTabs = params.get('hideTabs')
   const editorOnly = params.get('editorOnly') === 'true' || false
   const vertical = params.get('vertical') === 'true' || false
@@ -52,7 +52,7 @@ export function MEditor({ tabs }: MEditorProps) {
     displayTabs[0].tabName as Tab
   )
 
-  if (isFullscreen) {
+  if (previewOnly) {
     return (
       <div className="w-full h-screen overflow-hidden relative sm:flex grid">
         <Preview />

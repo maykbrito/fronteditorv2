@@ -15,7 +15,7 @@ let previewRenderTimer: NodeJS.Timeout
 
 export default function Preview() {
   const params = new URLSearchParams(window.location.search)
-  const fullscreen = Boolean(params.get('fullscreen'))
+  const previewOnly = Boolean(params.get('previewOnly'))
 
   const { app } = useContext(EditorContentContext)
 
@@ -65,7 +65,7 @@ export default function Preview() {
     }
   }, [renderPreview])
 
-  if (fullscreen) {
+  if (previewOnly) {
     return (
       <PreviewIframe src={src} />
     )
