@@ -2,16 +2,16 @@ import { useState } from 'react'
 import CustomEditor from '../CustomEditor'
 import Preview from '../Preview'
 
-import { type Tab, TabButton, type TabButtonProps } from './TabButton'
 import { Menu } from '@/components/DropdownMenu'
+import { type Tab, TabButton, type TabButtonProps } from './TabButton'
 
+import { useWindowSize } from '@uidotdev/usehooks'
 import logoSvg from '../../assets/logo.svg'
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '../ui/resizable'
-import { useWindowSize } from '@uidotdev/usehooks'
 
 interface MEditorProps {
   tabs?: TabButtonProps[] | null
@@ -65,10 +65,9 @@ export function MEditor({ tabs }: MEditorProps) {
       <nav className="flex items-center gap-1 py-1 px-0 sm:px-4 sm:py-2 bg-[#11111b]">
         {showLogo && (
           <a
-            title="visit the open-source project"
             href="https://github.com/maykbrito/fronteditorv2"
             target="_blank"
-            rel="noreferrer noopenner"
+            rel="noreferrer noopener"
             className="text-center px-4"
           >
             <img src={logoSvg} className="inline" alt="Fronteditor Logo" />

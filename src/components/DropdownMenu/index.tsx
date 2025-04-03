@@ -6,9 +6,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-
-import { DownloadZip } from './download-zip'
 import { GearIcon } from '@radix-ui/react-icons'
+import { DownloadZip } from './download-zip'
+import { SettingsModal } from './settings-modal'
 
 export function Menu() {
   return (
@@ -18,7 +18,8 @@ export function Menu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
-        {/* <DropdownMenuSeparator /> */}
+        <SettingsModal />
+        <DropdownMenuSeparator />
         <DownloadZip />
         {/* <DropdownMenuItem>Profile</DropdownMenuItem> */}
         {/* <DropdownMenuItem>Billing</DropdownMenuItem> */}

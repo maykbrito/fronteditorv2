@@ -1,15 +1,16 @@
-import { useContext } from 'react'
 import { EditorContentContext } from '@/contexts/EditorContentContext'
-
-import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
-import pretty from 'pretty'
+import JSZip from 'jszip'
 import { Download } from 'lucide-react'
+import pretty from 'pretty'
+import { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { DropdownMenuItem } from '../ui/dropdown-menu'
 
 const zip = new JSZip()
 
 export function DownloadZip() {
+  const { t } = useTranslation()
   const { app } = useContext(EditorContentContext)
 
   function addScriptsToParsedHtmlHead(parsed: Document) {
@@ -56,7 +57,7 @@ export function DownloadZip() {
   return (
     <DropdownMenuItem onClick={handleDownloadAsZip}>
       <Download className="mr-1 size-3" />
-      Download (zip)
+      {t('download.trigger')}
     </DropdownMenuItem>
   )
 }

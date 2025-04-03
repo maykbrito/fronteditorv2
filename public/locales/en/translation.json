@@ -1,0 +1,49 @@
+{
+    "preview": {
+        "title": "Preview",
+        "liveReload": "Live reload",
+        "liveReloadTooltip": "Reloads the preview when the code changes."
+    },
+    "download": {
+        "trigger": "Download (zip)"
+    },
+    "settingsModal": {
+        "trigger": "Settings",
+        "title": "Editor Settings",
+        "description": "Configure your editor preferences. Changes will apply after saving.",
+        "visibleTabs": "Visible Tabs",
+        "tabs": {
+            "html": "html",
+            "css": "css",
+            "javascript": "javascript",
+            "markdown": "markdown"
+        },
+        "layoutOptions": "Layout Options",
+        "showLogo": "Show Logo",
+        "previewOnly": "Preview Only",
+        "verticalLayout": "Vertical Layout",
+        "editorOnly": "Editor Only",
+        "reverseLayout": "Reverse Layout",
+        "themeLabel": "Theme",
+        "themePlaceholder": "Select theme",
+        "themes": {
+            "omni": "Omni",
+            "light": "Light (vs)",
+            "dark": "Dark (vs-dark)"
+        },
+        "lineNumbersLabel": "Line Numbers",
+        "lineNumbersPlaceholder": "Show line numbers",
+        "lineNumbers": {
+            "show": "Show",
+            "hide": "Hide"
+        },
+        "languageLabel": "Language",
+        "languagePlaceholder": "Select language",
+        "languages": {
+            "en": "English",
+            "ptBR": "Portuguese (Brazil)"
+        },
+        "resetButton": "Reset to Default",
+        "applyButton": "Apply changes"
+    }
+}

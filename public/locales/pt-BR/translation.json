@@ -1,0 +1,49 @@
+{
+    "preview": {
+        "title": "Visualização",
+        "liveReload": "Recarregamento automático",
+        "liveReloadTooltip": "Recarrega a visualização quando o código muda."
+    },
+    "download": {
+        "trigger": "Baixar código (zip)"
+    },
+    "settingsModal": {
+        "trigger": "Configurações",
+        "title": "Configurações do Editor",
+        "description": "Configure suas preferências do editor. As alterações serão aplicadas após salvar.",
+        "visibleTabs": "Abas Visíveis",
+        "tabs": {
+            "html": "html",
+            "css": "css",
+            "javascript": "javascript",
+            "markdown": "markdown"
+        },
+        "layoutOptions": "Opções de Layout",
+        "showLogo": "Mostrar Logo",
+        "previewOnly": "Apenas Visualização",
+        "verticalLayout": "Layout Vertical",
+        "editorOnly": "Apenas Editor",
+        "reverseLayout": "Layout Invertido",
+        "themeLabel": "Tema",
+        "themePlaceholder": "Selecione o tema",
+        "themes": {
+            "omni": "Omni",
+            "light": "Claro (vs)",
+            "dark": "Escuro (vs-dark)"
+        },
+        "lineNumbersLabel": "Números de Linha",
+        "lineNumbersPlaceholder": "Mostrar números de linha",
+        "lineNumbers": {
+            "show": "Mostrar",
+            "hide": "Ocultar"
+        },
+        "languageLabel": "Idioma",
+        "languagePlaceholder": "Selecione o idioma",
+        "languages": {
+            "en": "Inglês",
+            "ptBR": "Português (Brasil)"
+        },
+        "resetButton": "Restaurar Padrões",
+        "applyButton": "Aplicar alterações"
+    }
+}

@@ -1,12 +1,10 @@
-import { useState, useEffect, useContext, useCallback } from 'react'
-
+import { useCallback, useContext, useEffect, useState } from 'react'
 import {
   EditorContentContext,
   editorHotkeys,
 } from '../../contexts/EditorContentContext'
 import { formatCodeToIframe } from '../../utils/FormatCodeToIframe'
 import type { StorageKeys } from '../../utils/Storage'
-
 import { base64EncodeUnicode } from '../../utils/base-64-encode-unicode'
 import { Header } from './Header'
 import { PreviewIframe } from './preview-iframe'
@@ -66,9 +64,7 @@ export default function Preview() {
   }, [renderPreview])
 
   if (previewOnly) {
-    return (
-      <PreviewIframe src={src} />
-    )
+    return <PreviewIframe src={src} />
   }
 
   return (
