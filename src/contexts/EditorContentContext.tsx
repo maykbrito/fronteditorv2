@@ -1,23 +1,28 @@
+import { loadWASM } from 'onigasm'
 import {
-  createContext,
   ReactNode,
+  createContext,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from 'react'
-import { loadWASM } from 'onigasm'
 
 import { EditorProps, Monaco, OnMount } from '@monaco-editor/react'
 import { emmetHTML } from 'emmet-monaco-es'
 
-import Storage, { StorageKeys, StorageState } from '../utils/Storage'
-import { doesURLIncludesGist, getGist, isGistViewOnly } from '../utils/Gist'
-import { KeyMod, KeyCode, editor } from 'monaco-editor'
-import monacoOmniTheme from '../assets/monaco-themes/monaco-omni.json'
+import { KeyCode, KeyMod, editor } from 'monaco-editor'
 import { wireTmGrammars } from 'monaco-editor-textmate'
+import monacoOmniTheme from '../assets/monaco-themes/monaco-omni.json'
+import { doesURLIncludesGist, getGist, isGistViewOnly } from '../utils/Gist'
+import Storage, { StorageKeys, StorageState } from '../utils/Storage'
 import { registry } from '../utils/monaco-tm-registry'
 
+import {
+  doesURLIncludesGithub,
+  getGithub,
+  isGithubViewOnly,
+} from '@/utils/Github'
 import onigasmWASM from '../assets/onigasm.wasm?url'
 
 interface EditorContextProviderProps {
@@ -60,6 +65,21 @@ export function EditorContentContextProvider({
       getGist().then(gist => {
         setApp(gist)
         Storage.add(gist)
+      })
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!doesURLIncludesGithub) return
+
+    const currentApp = Storage.get()
+    const keys = Object.keys(currentApp) as StorageKeys[]
+    const hasDataInStorage = keys.some(key => currentApp[key] !== '')
+    if (isGithubViewOnly || !hasDataInStorage) {
+      getGithub().then(github => {
+        if (!github) return
+        setApp(github)
+        Storage.add(github)
       })
     }
   }, [])
