@@ -52,7 +52,7 @@ export function Header({
         <input
           type="checkbox"
           id="live-reload"
-          aria-label={t('liveReload')}
+          aria-label={t('preview.liveReload')}
           onChange={toggleLiveReload}
           checked={isLiveReloadEnabled}
           className="absolute inset-0 opacity-0 cursor-pointer"
