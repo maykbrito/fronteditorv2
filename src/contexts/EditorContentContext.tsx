@@ -1,156 +1,153 @@
-import { loadWASM } from 'onigasm'
+import { EditorProps, Monaco, OnMount } from "@monaco-editor/react";
+import { emmetHTML } from "emmet-monaco-es";
+import { editor, KeyCode, KeyMod } from "monaco-editor";
+import { wireTmGrammars } from "monaco-editor-textmate";
+import { loadWASM } from "onigasm";
 import {
-  ReactNode,
-  createContext,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-
-import { EditorProps, Monaco, OnMount } from '@monaco-editor/react'
-import { emmetHTML } from 'emmet-monaco-es'
-
-import { KeyCode, KeyMod, editor } from 'monaco-editor'
-import { wireTmGrammars } from 'monaco-editor-textmate'
-import monacoOmniTheme from '../assets/monaco-themes/monaco-omni.json'
-import { doesURLIncludesGist, getGist, isGistViewOnly } from '../utils/Gist'
-import Storage, { StorageKeys, StorageState } from '../utils/Storage'
-import { registry } from '../utils/monaco-tm-registry'
-
+	createContext,
+	ReactNode,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import {
-  doesURLIncludesGithub,
-  getGithub,
-  isGithubViewOnly,
-} from '@/utils/Github'
-import onigasmWASM from '../assets/onigasm.wasm?url'
+	doesURLIncludesGithub,
+	getGithub,
+	isGithubViewOnly,
+} from "@/utils/Github";
+import monacoOmniTheme from "../assets/monaco-themes/monaco-omni.json";
+import onigasmWASM from "../assets/onigasm.wasm?url";
+import { doesURLIncludesGist, getGist, isGistViewOnly } from "../utils/Gist";
+import { registry } from "../utils/monaco-tm-registry";
+import Storage, { StorageKeys, StorageState } from "../utils/Storage";
 
 interface EditorContextProviderProps {
-  children: ReactNode
+	children: ReactNode;
 }
 
 interface EditorContentContextData {
-  app: StorageState
-  isEditorReady: boolean
-  handleEditorDidMount: EditorProps['onMount']
-  handleValueChange: (language: string, value: string) => void
+	app: StorageState;
+	isEditorReady: boolean;
+	handleEditorDidMount: EditorProps["onMount"];
+	handleValueChange: (language: string, value: string) => void;
 }
 
 export const EditorContentContext = createContext(
-  {} as EditorContentContextData
-)
+	{} as EditorContentContextData,
+);
 
-export const editorHotkeys = new EventTarget()
-export const saveEvent = new CustomEvent('save')
+export const editorHotkeys = new EventTarget();
+export const saveEvent = new CustomEvent("save");
 
 export function EditorContentContextProvider({
-  children,
+	children,
 }: EditorContextProviderProps) {
-  const monacoRef = useRef<Monaco>()
-  const editorRef = useRef<editor.IStandaloneCodeEditor>()
+	const monacoRef = useRef<Monaco>();
+	const editorRef = useRef<editor.IStandaloneCodeEditor>();
 
-  const [app, setApp] = useState<Record<StorageKeys, string>>(Storage.get())
-  const [isEditorReady, setIsEditorReady] = useState(false)
+	const [app, setApp] = useState<Record<StorageKeys, string>>(Storage.get());
+	const [isEditorReady, setIsEditorReady] = useState(false);
 
-  useEffect(() => {
-    if (!doesURLIncludesGist) {
-      return
-    }
+	useEffect(() => {
+		if (!doesURLIncludesGist) {
+			return;
+		}
 
-    const currentApp = Storage.get()
-    const keys = Object.keys(currentApp) as StorageKeys[]
-    const hasDataInStorage = keys.some(key => currentApp[key] !== '')
+		const currentApp = Storage.get();
+		const keys = Object.keys(currentApp) as StorageKeys[];
+		const hasDataInStorage = keys.some((key) => currentApp[key] !== "");
 
-    if (isGistViewOnly || !hasDataInStorage) {
-      getGist().then(gist => {
-        setApp(gist)
-        Storage.add(gist)
-      })
-    }
-  }, [])
+		if (isGistViewOnly || !hasDataInStorage) {
+			getGist().then((gist) => {
+				setApp(gist);
+				Storage.add(gist);
+			});
+		}
+	}, []);
 
-  useEffect(() => {
-    if (!doesURLIncludesGithub) return
+	useEffect(() => {
+		if (!doesURLIncludesGithub) return;
 
-    const currentApp = Storage.get()
-    const keys = Object.keys(currentApp) as StorageKeys[]
-    const hasDataInStorage = keys.some(key => currentApp[key] !== '')
-    if (isGithubViewOnly || !hasDataInStorage) {
-      getGithub().then(github => {
-        if (!github) return
-        setApp(github)
-        Storage.add(github)
-      })
-    }
-  }, [])
+		const currentApp = Storage.get();
+		const keys = Object.keys(currentApp) as StorageKeys[];
+		const hasDataInStorage = keys.some((key) => currentApp[key] !== "");
+		if (isGithubViewOnly || !hasDataInStorage) {
+			getGithub().then((github) => {
+				if (!github) return;
+				setApp(github);
+				Storage.add(github);
+			});
+		}
+	}, []);
 
-  const handleValueChange = useCallback(
-    async (language: string, value: string) => {
-      setApp(oldState => {
-        const updatedValues = { ...oldState, [language]: value }
-        Storage.add(updatedValues)
-        return updatedValues
-      })
-    },
-    []
-  )
+	const handleValueChange = useCallback(
+		async (language: string, value: string) => {
+			setApp((oldState) => {
+				const updatedValues = { ...oldState, [language]: value };
+				Storage.add(updatedValues);
+				return updatedValues;
+			});
+		},
+		[],
+	);
 
-  const loadTmGrammars = useCallback(async () => {
-    await loadWASM(onigasmWASM)
+	const loadTmGrammars = useCallback(async () => {
+		await loadWASM(onigasmWASM);
 
-    const grammars = new Map()
+		const grammars = new Map();
 
-    grammars.set('css', 'source.css')
-    grammars.set('html', 'source.html')
-    grammars.set('javascript', 'source.js')
-    grammars.set('markdown', 'source.md')
+		grammars.set("css", "source.css");
+		grammars.set("html", "source.html");
+		grammars.set("javascript", "source.js");
+		grammars.set("markdown", "source.md");
 
-    monacoRef.current?.languages.register({ id: 'css' })
-    monacoRef.current?.languages.register({ id: 'html' })
-    monacoRef.current?.languages.register({ id: 'javascript' })
-    monacoRef.current?.languages.register({ id: 'markdown' })
+		monacoRef.current?.languages.register({ id: "css" });
+		monacoRef.current?.languages.register({ id: "html" });
+		monacoRef.current?.languages.register({ id: "javascript" });
+		monacoRef.current?.languages.register({ id: "markdown" });
 
-    await wireTmGrammars(
-      monacoRef.current!,
-      registry,
-      grammars,
-      editorRef.current
-    )
-  }, [])
+		await wireTmGrammars(
+			monacoRef.current!,
+			registry,
+			grammars,
+			editorRef.current,
+		);
+	}, []);
 
-  const handleEditorDidMount = useCallback<OnMount>(
-    (editor, monaco) => {
-      editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyS, () => {
-        editorHotkeys.dispatchEvent(saveEvent)
-      })
+	const handleEditorDidMount = useCallback<OnMount>(
+		(editor, monaco) => {
+			editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyS, () => {
+				editorHotkeys.dispatchEvent(saveEvent);
+			});
 
-      editorRef.current = editor
-      monacoRef.current = monaco
+			editorRef.current = editor;
+			monacoRef.current = monaco;
 
-      monacoRef.current.editor.defineTheme(
-        'custom-theme',
-        monacoOmniTheme as editor.IStandaloneThemeData
-      )
+			monacoRef.current.editor.defineTheme(
+				"custom-theme",
+				monacoOmniTheme as editor.IStandaloneThemeData,
+			);
 
-      loadTmGrammars().then(() => {
-        monacoRef.current?.editor.setTheme('custom-theme')
-        emmetHTML()
-        setIsEditorReady(true)
-      })
-    },
-    [loadTmGrammars]
-  )
+			loadTmGrammars().then(() => {
+				monacoRef.current?.editor.setTheme("custom-theme");
+				emmetHTML();
+				setIsEditorReady(true);
+			});
+		},
+		[loadTmGrammars],
+	);
 
-  return (
-    <EditorContentContext.Provider
-      value={{
-        app,
-        isEditorReady,
-        handleEditorDidMount,
-        handleValueChange,
-      }}
-    >
-      {children}
-    </EditorContentContext.Provider>
-  )
+	return (
+		<EditorContentContext.Provider
+			value={{
+				app,
+				isEditorReady,
+				handleEditorDidMount,
+				handleValueChange,
+			}}
+		>
+			{children}
+		</EditorContentContext.Provider>
+	);
 }
