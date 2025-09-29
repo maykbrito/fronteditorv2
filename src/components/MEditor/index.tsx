@@ -55,7 +55,7 @@ export function MEditor({ tabs }: MEditorProps) {
   if (previewOnly) {
     return (
       <div className="w-full h-screen overflow-hidden relative sm:flex grid">
-        <Preview />
+        <Preview selectedTab={selectedTab} />
       </div>
     )
   }
@@ -113,11 +113,11 @@ export function MEditor({ tabs }: MEditorProps) {
         }
       >
         <ResizablePanel>
-          {!reverse ? renderEditor() : <Preview />}
+          {!reverse ? renderEditor() : <Preview selectedTab={selectedTab} />}
         </ResizablePanel>
         <ResizableHandle />
         <ResizablePanel>
-          {!reverse ? <Preview /> : renderEditor()}
+          {!reverse ? <Preview selectedTab={selectedTab} /> : renderEditor()}
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>

@@ -11,9 +11,20 @@ import { SimpleNotification } from "../SafetyNotification";
 import { Header } from "./Header";
 import { PreviewIframe } from "./preview-iframe";
 
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
+import {dracula} from 'react-syntax-highlighter/dist/esm/styles/prism'
+
+
+import type { Tab } from '../MEditor/TabButton';
 let previewRenderTimer: NodeJS.Timeout;
 
-export default function Preview() {
+interface PreviewProps {
+	selectedTab?: Tab;
+}
+
+export default function Preview({ selectedTab }: PreviewProps) {
 	const params = new URLSearchParams(window.location.search);
 	const previewOnly = Boolean(params.get("previewOnly"));
 
@@ -94,7 +105,7 @@ export default function Preview() {
 		setSrc(codeToIframe);
 		setPreviewTitle(pageTitle?.groups?.title ?? "index.html");
 		setPageIcon(pageIcon?.groups?.icon ?? "");
-	}, [app]);
+		}, [app, isLiveReloadEnabled, hasUnsafeCode]);
 
 	useEffect(() => {
 		if (isLiveReloadEnabled) {
@@ -114,9 +125,16 @@ export default function Preview() {
 		};
 	}, [renderPreview]);
 
-	if (previewOnly) {
-		return <PreviewIframe src={src} />;
-	}
+			if (previewOnly) {
+							if (selectedTab === 'markdown') {
+								return (
+									<div className="h-full flex-1 overflow-auto p-6 bg-white/2 dark:bg-[#0f0f14]">
+										<ReactMarkdown remarkPlugins={[remarkGfm]}>{app.markdown || ''}</ReactMarkdown>
+									</div>
+								);
+							}
+				return <PreviewIframe src={src} />;
+			}
 
 	// Função para lidar com toggle do live reload com verificação de segurança
 	const handleLiveReloadToggle = useCallback(
@@ -156,9 +174,97 @@ export default function Preview() {
 				</div>
 			)}
 
-			<div className="h-full flex-1">
+			<div className="h-full flex-1 overflow-auto">
+			  {selectedTab === 'markdown' ? (
+				<div className="markdown-preview p-6 bg-white/5 dark:bg-[#0f0f14] h-full overflow-auto">
+				  <ReactMarkdown
+					remarkPlugins={[remarkGfm]}
+					components={{
+						code({ children, className }) {
+							const match = /language-(\w+)/.exec(className || '');
+							const codeText = String(children).replace(/\n$/, '');
+
+							if (match) {
+								return (
+									<SyntaxHighlighter
+										PreTag="div"
+										language={match[1]}
+										style={dracula}
+									>
+										{codeText}
+									</SyntaxHighlighter>
+								);
+							}
+							return <code className={`${className} text-gray-700 bg-gray-200`}>{children}</code>;
+						},
+						h1: ({node, ...props}) => <h1 className="text-3xl font-bold my-4" {...props} 
+						id={getIdFromHeading(node?.children)} />,
+						h2: ({node, ...props}) => <h2 className="text-2xl font-bold my-4" {...props} 
+						id={getIdFromHeading(node?.children)} />,
+						h3: ({node, ...props}) => <h3 className="text-xl font-bold my-4" {...props} 
+						id={getIdFromHeading(node?.children)} />,
+						h4: ({node, ...props}) => <h4 className="text-lg font-bold my-4" {...props} 
+						id={getIdFromHeading(node?.children)} />,
+						h5: ({node, ...props}) => <h5 className="text-base font-bold my-4" {...props} 
+						id={getIdFromHeading(node?.children)} />,
+						h6: ({node, ...props}) => <h6 className="text-sm font-bold my-4" {...props} 
+						id={getIdFromHeading(node?.children)} />,
+						p: ({node, ...props}) => <p className="my-2 leading-7" {...props} />,
+						a: ({node, ...props}) => <a className="text-blue-500 underline" {...props} />,
+						li: ({node, ...props}) => <li className="ml-6 list-disc" {...props} />,
+						ul: ({node, ...props}) => <ul className="my-2" {...props} />,
+						ol: ({node, ...props}) => <ol className="my-2 list-decimal" {...props} />,
+						blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-gray-400 pl-4 italic my-4 text-gray-500" {...props} />,
+						hr: ({node, ...props}) => <hr className="my-4 border-gray-600" {...props} />,
+						table: ({node, ...props}) => <table className="w-full table-auto my-4 border-collapse border border-gray-600" {...props} />,
+						th: ({node, ...props}) => <th className="border border-gray-600 bg-gray-700 px-4 py-2 text-left" {...props} />,
+						td: ({node, ...props}) => <td className="border border-gray-600 px-4 py-2" {...props} />,
+						tr: ({node, ...props}) => <tr className="hover:bg-gray-800" {...props} />
+					}}
+					>
+						{app.markdown || ''}
+						</ReactMarkdown>
+				</div>
+			  ) : (
 				<PreviewIframe src={src} />
+			  )}
 			</div>
 		</div>
 	);
 }
+
+const getIdFromHeading = (children: unknown): string => {
+	// Guard: children must be an array
+	if (!Array.isArray(children) || children.length === 0) return "";
+
+	const texts: string[] = [];
+
+	const collectText = (node: unknown) => {
+		if (node == null) return;
+
+		// plain string node
+		if (typeof node === "string") {
+			texts.push(node);
+			return;
+		}
+
+		// object node - try to pull 'value' if it's a string
+		if (typeof node === "object") {
+			const obj = node as Record<string, unknown>;
+			if (typeof obj.value === "string") {
+				texts.push(obj.value);
+			}
+
+			// if it has children, recurse
+			if (Array.isArray(obj.children)) {
+				for (const child of obj.children) collectText(child);
+			}
+		}
+	};
+
+	for (const child of children) collectText(child);
+
+	const full = texts.join(" ").trim();
+	if (!full) return "";
+	return full.replace(/\s+/g, "-").toLowerCase();
+};
